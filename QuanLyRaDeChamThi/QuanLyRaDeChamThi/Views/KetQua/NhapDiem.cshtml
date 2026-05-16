@@ -1,0 +1,133 @@
+@model QuanLyRaDeChamThi.Models.ViewModels.NhapDiemViewModel
+
+@{
+    ViewBag.Title = "Nhập điểm – " + Model.TenMon;
+}
+
+<div class="page-header">
+    <h2>
+        <i class="glyphicon glyphicon-pencil"></i> Nhập điểm thi
+        <small>@Model.TenMon – HK@Model.HocKy – @Model.NamHoc</small>
+    </h2>
+</div>
+
+<!-- Lọc theo lớp -->
+<div class="panel panel-default">
+    <div class="panel-body form-inline">
+        <label>Lọc theo lớp: </label>
+        <select id="filterLop" class="form-control" style="margin: 0 10px;" onchange="this.form.submit()">
+            <option value="">-- Tất cả lớp --</option>
+            @foreach (var lop in Model.DanhSachLop)
+            {
+                <option value="@lop.MaLop" @(Model.MaLopFilter == lop.MaLop ? "selected" : "")>@lop.TenLop</option>
+            }
+        </select>
+        <a href="@Url.Action("NhapDiem", new { maDT = Model.MaDT })" class="btn btn-default">Xem tất cả</a>
+    </div>
+</div>
+
+<p>Tổng: <strong>@Model.DanhSachDiem.Count</strong> sinh viên
+   | Đã chấm: <strong>@Model.DanhSachDiem.Count(x => x.DaCham)</strong>
+   | Chưa chấm: <strong>@Model.DanhSachDiem.Count(x => !x.DaCham)</strong>
+</p>
+
+@using (Html.BeginForm("LuuDiem", "KetQua", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="maDT" value="@Model.MaDT" />
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th style="width:50px;">STT</th>
+                <th>Họ tên sinh viên</th>
+                <th style="width:120px;">Lớp</th>
+                <th style="width:120px;">Điểm số (0-10)</th>
+                <th style="width:80px;">Điểm chữ</th>
+                <th style="width:110px;">Ngày chấm</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int stt = 1;}
+            @for (int i = 0; i < Model.DanhSachDiem.Count; i++)
+            {
+                var item = Model.DanhSachDiem[i];
+                <tr class="@(item.DaCham ? "success" : "")">
+                    <td>@(stt++)</td>
+                    <td>@item.HoTen</td>
+                    <td>@item.TenLop</td>
+                    <td>
+                        <input type="hidden" name="maSVList[@i]" value="@item.MaSV" />
+                        <input type="number" name="diemSoList[@i]"
+                               value="@(item.DiemSo.HasValue ? item.DiemSo.Value.ToString("0.##") : "")"
+                               class="form-control input-diem" min="0" max="10" step="0.25"
+                               placeholder="0-10" style="width:90px;"
+                               onchange="tinhDiemChu(this, @i)" />
+                    </td>
+                    <td>
+                        <span id="diemChu_@i" class="label @(GetDiemChuClass(item.DiemChu))">
+                            @(item.DiemChu ?? "--")
+                        </span>
+                    </td>
+                    <td class="text-muted small">
+                        @(item.NgayCham.HasValue ? item.NgayCham.Value.ToString("dd/MM/yyyy") : "--")
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div style="margin-top:15px;">
+        <button type="submit" class="btn btn-primary btn-lg">
+            <i class="glyphicon glyphicon-floppy-disk"></i> Lưu tất cả điểm
+        </button>
+        <a href="@Url.Action("Index")" class="btn btn-default btn-lg">
+            <i class="glyphicon glyphicon-arrow-left"></i> Quay lại
+        </a>
+    </div>
+}
+
+@functions {
+    string GetDiemChuClass(string diemChu)
+    {
+        if (diemChu == null) return "label-default";
+        if (diemChu == "A") return "label-success";
+        if (diemChu == "B+" || diemChu == "B") return "label-info";
+        if (diemChu == "C+" || diemChu == "C") return "label-warning";
+        if (diemChu == "D+" || diemChu == "D") return "label-default";
+        return "label-danger"; // F
+    }
+}
+
+@section scripts {
+<script>
+    // Bảng quy đổi điểm chữ
+    var bangDiem = [
+        { tu: 8.5, den: 10.0, chu: 'A', cls: 'label-success' },
+        { tu: 8.0, den: 8.49, chu: 'B+', cls: 'label-info' },
+        { tu: 7.0, den: 7.99, chu: 'B', cls: 'label-info' },
+        { tu: 6.5, den: 6.99, chu: 'C+', cls: 'label-warning' },
+        { tu: 5.5, den: 6.49, chu: 'C', cls: 'label-warning' },
+        { tu: 5.0, den: 5.49, chu: 'D+', cls: 'label-default' },
+        { tu: 4.0, den: 4.99, chu: 'D', cls: 'label-default' },
+        { tu: 0.0, den: 3.99, chu: 'F', cls: 'label-danger' }
+    ];
+
+    function tinhDiemChu(input, idx) {
+        var val = parseFloat(input.value);
+        var span = document.getElementById('diemChu_' + idx);
+        if (isNaN(val) || val < 0 || val > 10) {
+            span.textContent = '--';
+            span.className = 'label label-default';
+            return;
+        }
+        for (var i = 0; i < bangDiem.length; i++) {
+            if (val >= bangDiem[i].tu && val <= bangDiem[i].den) {
+                span.textContent = bangDiem[i].chu;
+                span.className = 'label ' + bangDiem[i].cls;
+                break;
+            }
+        }
+    }
+</script>
+}

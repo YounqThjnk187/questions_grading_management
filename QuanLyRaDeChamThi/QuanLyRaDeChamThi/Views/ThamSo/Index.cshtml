@@ -1,0 +1,49 @@
+@model IEnumerable<QuanLyRaDeChamThi.Models.ThamSoModel>
+
+@{
+    ViewBag.Title = "Tham số hệ thống";
+}
+
+<div class="page-header">
+    <h2><i class="glyphicon glyphicon-cog"></i> Tham số hệ thống – Thay đổi quy định</h2>
+</div>
+
+<div class="alert alert-info">
+    <i class="glyphicon glyphicon-info-sign"></i>
+    Các tham số này kiểm soát quy định nghiệp vụ của hệ thống. Thay đổi sẽ có hiệu lực ngay lập tức.
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Tên tham số</th>
+            <th>Giá trị hiện tại</th>
+            <th>Ghi chú</th>
+            <th style="width:100px;">Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><strong>@item.TenThamSo</strong></td>
+                <td>
+                    @if (item.TenThamSo.Contains("ThoiLuong"))
+                    {
+                        <span class="badge badge-info">@item.GiaTri phút</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-primary">@item.GiaTri</span>
+                    }
+                </td>
+                <td class="text-muted">@item.GhiChu</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = item.TenThamSo })" class="btn btn-xs btn-warning">
+                        <i class="glyphicon glyphicon-pencil"></i> Sửa
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,52 @@
+@model QuanLyRaDeChamThi.Models.CauHoiModel
+
+@{
+    ViewBag.Title = "Chỉnh sửa câu hỏi";
+}
+
+<div class="page-header">
+    <h2><i class="glyphicon glyphicon-pencil"></i> Chỉnh sửa câu hỏi #@Model.MaCH</h2>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.MaCH)
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.MaMon)
+                @Html.DropDownList("MaMon", (SelectList)ViewBag.DanhSachMon, "-- Chọn môn học --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.MaMon, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.MaDoKho)
+                @Html.DropDownList("MaDoKho", (SelectList)ViewBag.DanhSachDoKho, "-- Chọn độ khó --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.MaDoKho, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.NoiDung)
+                @Html.TextAreaFor(m => m.NoiDung, new { @class = "form-control", rows = 5 })
+                @Html.ValidationMessageFor(m => m.NoiDung, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group" style="margin-top:20px;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-floppy-disk"></i> Cập nhật
+                </button>
+                <a href="@Url.Action("Index")" class="btn btn-default">
+                    <i class="glyphicon glyphicon-arrow-left"></i> Quay lại
+                </a>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

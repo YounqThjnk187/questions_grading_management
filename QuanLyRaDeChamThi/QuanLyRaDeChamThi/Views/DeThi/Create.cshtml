@@ -1,0 +1,213 @@
+@model QuanLyRaDeChamThi.Models.ViewModels.SoanDeThiViewModel
+
+@{
+    ViewBag.Title = "Soạn đề thi mới";
+}
+
+<div class="page-header">
+    <h2><i class="glyphicon glyphicon-plus-sign"></i> Soạn đề thi mới</h2>
+</div>
+
+@using (Html.BeginForm("Create", "DeThi", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false, "", new { @class = "alert alert-danger" })
+
+    <div class="row">
+        <!-- Cột trái: Thông tin đề thi -->
+        <div class="col-md-5">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><i class="glyphicon glyphicon-info-sign"></i> Thông tin đề thi</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.MaMon)
+                        @Html.DropDownListFor(m => m.MaMon,
+                            new SelectList(Model.DanhSachMonHoc, "MaMon", "TenMon"),
+                            "-- Chọn môn học --",
+                            new { @class = "form-control", id = "ddlMon" })
+                        @Html.ValidationMessageFor(m => m.MaMon, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.HocKy)
+                                @Html.DropDownListFor(m => m.HocKy,
+                                    new SelectList(new[] {
+                                        new { Value = 1, Text = "Học kỳ 1" },
+                                        new { Value = 2, Text = "Học kỳ 2" }
+                                    }, "Value", "Text"),
+                                    "-- Chọn HK --",
+                                    new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.HocKy, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.NamHoc)
+                                @Html.TextBoxFor(m => m.NamHoc, new { @class = "form-control", placeholder = "VD: 2024-2025" })
+                                @Html.ValidationMessageFor(m => m.NamHoc, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ThoiLuong)
+                                <div class="input-group">
+                                    @Html.TextBoxFor(m => m.ThoiLuong, new { @class = "form-control", type = "number", min = 30, max = 180 })
+                                    <span class="input-group-addon">phút</span>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.ThoiLuong, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.NgayThi)
+                                @Html.TextBoxFor(m => m.NgayThi, new { @class = "form-control", type = "date" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Câu hỏi đã chọn -->
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <i class="glyphicon glyphicon-check"></i> Câu hỏi đã chọn
+                    <span class="badge" id="soLuongChon">0</span> / 5 câu
+                </div>
+                <div class="panel-body" id="danhSachDaChon" style="min-height:80px;">
+                    <p class="text-muted text-center" id="chuaChon"><i>Chưa chọn câu hỏi nào</i></p>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-lg">
+                <i class="glyphicon glyphicon-floppy-disk"></i> Lưu đề thi
+            </button>
+            <a href="@Url.Action("Index")" class="btn btn-default btn-block" style="margin-top:5px;">
+                <i class="glyphicon glyphicon-arrow-left"></i> Hủy bỏ
+            </a>
+        </div>
+
+        <!-- Cột phải: Chọn câu hỏi -->
+        <div class="col-md-7">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="glyphicon glyphicon-list-alt"></i> Ngân hàng câu hỏi
+                    <span class="text-warning">(Chọn tối đa 5 câu)</span>
+                </div>
+                <div class="panel-body">
+                    <div class="form-inline" style="margin-bottom:10px;">
+                        <label>Lọc độ khó: </label>
+                        <select id="filterDoKho" class="form-control" style="margin:0 10px;">
+                            <option value="">Tất cả</option>
+                            @foreach (var dk in Model.DanhSachDoKho)
+                            {
+                                <option value="@dk.MaDoKho">@dk.TenDoKho</option>
+                            }
+                        </select>
+                        <button type="button" class="btn btn-default btn-sm" id="btnLocCauHoi">
+                            <i class="glyphicon glyphicon-filter"></i> Lọc
+                        </button>
+                    </div>
+
+                    <div id="danhSachCauHoi" style="max-height:450px; overflow-y:auto;">
+                        <p class="text-muted text-center" id="chonMonTruoc">
+                            <i class="glyphicon glyphicon-arrow-up"></i> Vui lòng chọn môn học trước
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden inputs cho câu hỏi được chọn -->
+    <div id="hiddenInputs"></div>
+}
+
+@section scripts {
+<script>
+    var selectedQuestions = [];
+
+    $('#ddlMon').change(function() {
+        loadCauHoi();
+    });
+
+    $('#btnLocCauHoi').click(function() {
+        loadCauHoi();
+    });
+
+    function loadCauHoi() {
+        var maMon = $('#ddlMon').val();
+        var maDoKho = $('#filterDoKho').val();
+        if (!maMon) return;
+
+        $.post('@Url.Action("GetCauHoiByMon", "DeThi")', { maMon: maMon, maDoKho: maDoKho }, function(data) {
+            var html = '';
+            if (data.length === 0) {
+                html = '<p class="text-muted text-center"><i>Không có câu hỏi nào</i></p>';
+            } else {
+                data.forEach(function(ch) {
+                    var isChecked = selectedQuestions.indexOf(ch.MaCH) !== -1;
+                    var badgeClass = ch.MaCH <= 5 ? 'success' : ch.MaCH <= 10 ? 'info' : 'warning';
+                    html += '<div class="checkbox" style="border-bottom:1px solid #eee; padding:8px 5px;">';
+                    html += '<label>';
+                    html += '<input type="checkbox" class="chkCauHoi" value="' + ch.MaCH + '" ' + (isChecked ? 'checked' : '') + '> ';
+                    html += '<strong>#' + ch.MaCH + '</strong> ';
+                    html += ch.NoiDung.substring(0, 80) + (ch.NoiDung.length > 80 ? '...' : '');
+                    html += ' <span class="label label-' + badgeClass + '">' + ch.TenDoKho + '</span>';
+                    html += '</label>';
+                    html += '</div>';
+                });
+            }
+            $('#danhSachCauHoi').html(html);
+            $('#chonMonTruoc').hide();
+            bindCheckboxEvents();
+        });
+    }
+
+    function bindCheckboxEvents() {
+        $('.chkCauHoi').change(function() {
+            var val = parseInt($(this).val());
+            if ($(this).is(':checked')) {
+                if (selectedQuestions.length >= 5) {
+                    alert('Chỉ được chọn tối đa 5 câu hỏi!');
+                    $(this).prop('checked', false);
+                    return;
+                }
+                selectedQuestions.push(val);
+            } else {
+                selectedQuestions = selectedQuestions.filter(function(x) { return x !== val; });
+            }
+            updateSelectedPanel();
+        });
+    }
+
+    function updateSelectedPanel() {
+        $('#soLuongChon').text(selectedQuestions.length);
+        var html = '';
+        var hiddenHtml = '';
+        if (selectedQuestions.length === 0) {
+            html = '<p class="text-muted text-center" id="chuaChon"><i>Chưa chọn câu hỏi nào</i></p>';
+        } else {
+            selectedQuestions.forEach(function(id, idx) {
+                html += '<div class="alert alert-success alert-sm" style="padding:5px 10px; margin-bottom:5px;">';
+                html += '<i class="glyphicon glyphicon-ok"></i> Câu hỏi #' + id;
+                html += ' <a href="#" class="close" onclick="removeQuestion(' + id + '); return false;">&times;</a>';
+                html += '</div>';
+                hiddenHtml += '<input type="hidden" name="CauHoiDuocChon[' + idx + ']" value="' + id + '" />';
+            });
+        }
+        $('#danhSachDaChon').html(html);
+        $('#hiddenInputs').html(hiddenHtml);
+    }
+
+    function removeQuestion(id) {
+        selectedQuestions = selectedQuestions.filter(function(x) { return x !== id; });
+        $('.chkCauHoi[value="' + id + '"]').prop('checked', false);
+        updateSelectedPanel();
+    }
+</script>
+}
