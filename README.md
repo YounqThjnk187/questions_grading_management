@@ -177,11 +177,24 @@ Mở trình duyệt: `http://localhost:8080/login`
 
 ---
 
-## 🗂️ Cấu trúc project
+## 🗂️ Cấu trúc Project (Đầy đủ)
+
 ```
-.
-├── 📁 QuanLyRaDeChamThi/
-│   ├── 📁 QuanLyRaDeChamThi/ (ASP.NET MVC)
+Project/ (Root)
+├── 📁 DOCUMENT/ ⭐ Tài liệu 9 chương (theo yêu cầu đồ án)
+│   ├── Chuong 1 - Tong quan/
+│   ├── Chuong 2 - Xac dinh yeu cau/
+│   ├── Chuong 3 - Phan tich yeu cau/
+│   ├── Chuong 4 - Thiet ke he thong/
+│   ├── Chuong 5 - Thiet ke doi tuong/
+│   ├── Chuong 6 - Thiet ke du lieu/
+│   ├── Chuong 7 - Thiet ke giao dien/
+│   ├── Chuong 8 - Cai dat phan mem/
+│   ├── Chuong 9 - Kiem thu va bao tri/
+│   └── TÀI LIỆU HƯỚNG DẪN THỰC HÀNH/
+│
+├── 📁 QuanLyRaDeChamThi/ (ASP.NET MVC Project)
+│   ├── 📁 QuanLyRaDeChamThi/ (Main project)
 │   │   ├── App_Start/
 │   │   │   ├── BundleConfig.cs
 │   │   │   ├── FilterConfig.cs
@@ -196,25 +209,59 @@ Mở trình duyệt: `http://localhost:8080/login`
 │   │   ├── Models/
 │   │   ├── Views/
 │   │   └── Web.config
-│   ├── 📁 BaoCao/
-│   │   ├── 📄 BAO_CAO_HOAN_CHINH.docx  ⭐ Báo cáo Word (tổng hợp)
+│   ├── 📁 BaoCao/ ⭐ Báo cáo chi tiết (16 file Markdown)
+│   │   ├── 📄 BAO_CAO_HOAN_CHINH.docx  (Word - tổng hợp)
 │   │   ├── 00_BIA.md
 │   │   ├── 01_NHANXET.md
-│   │   ├── ... (01-15: 16 file Markdown)
-│   │   └── 15_KETLUAN_TAILIEU.md
+│   │   ├── 02_LOICAMON.md
+│   │   ├── 03_MUCLUC.md
+│   │   ├── 04_DANHSACHHINHANH_BANGBIEU.md
+│   │   ├── 05_TOMTAT.md
+│   │   ├── 06_CHUONG1_TONGQUAN.md
+│   │   ├── 07_CHUONG2_XACDINH_YEUCAU.md
+│   │   ├── 08_CHUONG3_PHANTICH_YEUCAU.md
+│   │   ├── 09_CHUONG4_THIETKE_HETHONG.md
+│   │   ├── 10_CHUONG5_THIETKE_DOITUONG.md
+│   │   ├── 11_CHUONG6_THIETKE_DULIEU.md
+│   │   ├── 12_CHUONG7_THIETKE_GIAODIEN.md
+│   │   ├── 13_CHUONG8_CAIDAT.md
+│   │   ├── 14_CHUONG9_KIEMTHU.md
+│   │   ├── 15_KETLUAN_TAILIEU.md
+│   │   └── HUONGDAN_CHUYEN_DOI_WORD.md
 │   ├── 📁 Database/
 │   │   └── QuanLyRaDeChamThi.sql
+│   ├── 📁 Slides/
+│   │   └── SLIDE_THUYET_TRINH.md
 │   ├── 📄 demo_app.py
-│   └── 📄 README.md
-├── 📁 SLIDE/
-│   ├── 📄 presentation.html             ⭐ Thuyết trình HTML (17 slides)
-│   ├── 📄 PRESENTATION.pptx             ⭐ Thuyết trình PowerPoint
-│   ├── 📄 CANVA_AI_PROMPT.md            ⭐ Hướng dẫn Canva AI
-│   ├── Slide 1.html
-│   ├── Slide 2.html
-│   ├── ... (Slide 3-17)
-│   └── Slide 17.html
-└── 📄 README.md
+│   ├── 📄 QuanLyRaDeChamThi.sln
+│   ├── HUONGDAN_PLANTUML.md
+│   └── README.md
+│
+├── 📁 SLIDE/ ⭐ Bài thuyết trình 17 slides (Root level)
+│   ├── 📄 presentation.html             ⭐ (Khuyến nghị - tương tác)
+│   ├── 📄 PRESENTATION.pptx             ⭐ (PowerPoint)
+│   ├── 📄 CANVA_AI_PROMPT.md            ⭐ (Hướng dẫn Canva AI)
+│   ├── Slide 1.html  - Cover
+│   ├── Slide 2.html  - Team
+│   ├── Slide 3.html  - Problems
+│   ├── Slide 4.html  - Objectives
+│   ├── Slide 5.html  - Tech Stack
+│   ├── Slide 6.html  - Features 1/2
+│   ├── Slide 7.html  - Features 2/2
+│   ├── Slide 8.html  - UI Login
+│   ├── Slide 9.html  - UI Dashboard
+│   ├── Slide 10.html - UI Questions
+│   ├── Slide 11.html - Database
+│   ├── Slide 12.html - Performance
+│   ├── Slide 13.html - Testing
+│   ├── Slide 14.html - Demo Video
+│   ├── Slide 15.html - Challenges
+│   ├── Slide 16.html - Results & Roadmap
+│   └── Slide 17.html - Q&A
+│
+├── 📁 Reference/ (Tài liệu tham khảo)
+│
+└── 📄 README.md (File này)
 ```
 
 ---
@@ -254,26 +301,40 @@ Mở trình duyệt: `http://localhost:8080/login`
 
 ## 📦 Các File Deliverable
 
-### 📊 Báo Cáo
+### � Tài liệu 9 chương (DOCUMENT/)
+| Folder | Mô tả |
+|--------|-------|
+| `Chuong 1 - Tong quan` | Tổng quan dự án, mục tiêu |
+| `Chuong 2 - Xac dinh yeu cau` | Xác định yêu cầu hệ thống |
+| `Chuong 3 - Phan tich yeu cau` | Phân tích yêu cầu chi tiết |
+| `Chuong 4 - Thiet ke he thong` | Thiết kế kiến trúc hệ thống |
+| `Chuong 5 - Thiet ke doi tuong` | Thiết kế các đối tượng |
+| `Chuong 6 - Thiet ke du lieu` | Thiết kế database schema |
+| `Chuong 7 - Thiet ke giao dien` | Thiết kế giao diện người dùng |
+| `Chuong 8 - Cai dat phan mem` | Cài đặt và triển khai |
+| `Chuong 9 - Kiem thu va bao tri` | Kiểm thử và bảo trì |
+| `TÀI LIỆU HƯỚNG DẪN THỰC HÀNH` | Tài liệu hướng dẫn practice |
+
+### 📊 Báo Cáo (QuanLyRaDeChamThi/BaoCao/)
 | File | Định dạng | Mô tả |
 |------|-----------|-------|
-| `BAO_CAO_HOAN_CHINH.docx` | Word | Báo cáo 120+ trang, gộp từ 16 file MD |
-| `BaoCao/` | Markdown | 16 file MD chi tiết (9 chương) |
+| `BAO_CAO_HOAN_CHINH.docx` | Word | **Báo cáo tổng hợp 120+ trang** - gộp từ 16 file MD |
+| `BaoCao/` | Markdown | 16 file MD chi tiết (có thể chỉnh sửa riêng lẻ) |
 
-### 🎬 Thuyết Trình
+### 🎬 Thuyết Trình (SLIDE/)
 | File | Định dạng | Mô tả | Cách sử dụng |
 |------|-----------|-------|-------------|
-| `presentation.html` | HTML | **Khuyến nghị** - 17 slides tương tác | Mở trên browser, dùng arrow keys |
-| `PRESENTATION.pptx` | PowerPoint | Có thể chỉnh sửa trong PowerPoint | Mở bằng PowerPoint/Google Slides |
+| `presentation.html` | HTML | **Khuyến nghị** - 17 slides tương tác | Mở trên browser, ← → điều hướng |
+| `PRESENTATION.pptx` | PowerPoint | Tất cả 17 slides - có thể chỉnh sửa | Mở bằng PowerPoint |
 | `Slide [1-17].html` | HTML | Các slide riêng lẻ | Mở từng file trên browser |
 | `CANVA_AI_PROMPT.md` | Markdown | Prompt chi tiết cho Canva AI | Copy vào Canva để tạo slides |
 
-### 🔧 Mã Nguồn
+### 🔧 Mã Nguồn (QuanLyRaDeChamThi/)
 | File | Định dạng | Mô tả |
 |------|-----------|-------|
-| `QuanLyRaDeChamThi.sln` | Visual Studio | Solution chính (ASP.NET MVC) |
-| `demo_app.py` | Python | Demo server (không cần VS) |
-| `Database/QuanLyRaDeChamThi.sql` | SQL | Script database |
+| `QuanLyRaDeChamThi.sln` | Visual Studio | Solution chính (ASP.NET MVC full) |
+| `demo_app.py` | Python | Demo server (chạy không cần VS) |
+| `Database/QuanLyRaDeChamThi.sql` | SQL | Script tạo database + dữ liệu mẫu |
 
 ---
 
