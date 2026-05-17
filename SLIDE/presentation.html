@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hệ thống Quản lý Ra đề & Chấm thi - Thuyết trình</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+    background: #0F172A;
+    color: #0F172A;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .presentation-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .slides-wrapper {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: white;
+  }
+
+  .slide-frame {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    display: none;
+  }
+
+  .slide-frame.active {
+    opacity: 1;
+    transform: translateX(0);
+    display: block;
+  }
+
+  .slide-frame.prev {
+    transform: translateX(-100%);
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: linear-gradient(90deg, #4F46E5, #7C3AED, #EC4899);
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .controls-left, .controls-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .slide-counter {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    min-width: 120px;
+    text-align: center;
+  }
+
+  button {
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+  }
+
+  button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: translateY(-2px);
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .progress-bar {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+    width: 120px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: white;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+  }
+
+  .fullscreen-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .help-text {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-right: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .controls {
+      flex-direction: column;
+      gap: 15px;
+      padding: 15px 20px;
+    }
+
+    .controls-left, .controls-right {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .help-text {
+      display: none;
+    }
+
+    .slide-counter {
+      min-width: auto;
+    }
+  }
+
+  /* Keyboard hint */
+  .keyboard-hint {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 12px;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .keyboard-hint.show {
+    opacity: 1;
+  }
+</style>
+</head>
+<body>
+
+<div class="presentation-container">
+  <div class="slides-wrapper" id="slidesWrapper"></div>
+  
+  <div class="controls">
+    <div class="controls-left">
+      <button id="prevBtn" onclick="previousSlide()">← Trước</button>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+    
+    <div class="slide-counter">
+      <span id="currentSlide">1</span> / <span id="totalSlides">17</span>
+    </div>
+    
+    <div class="controls-right">
+      <span class="help-text">Arrow keys (←→) or Click</span>
+      <button id="nextBtn" onclick="nextSlide()">Tiếp →</button>
+      <button id="fullscreenBtn" onclick="toggleFullscreen()" class="fullscreen-btn">⛶ Fullscreen</button>
+    </div>
+  </div>
+</div>
+
+<div class="keyboard-hint" id="keyboardHint">
+  ← → Điều hướng | Space Tiếp | F Fullscreen | ? Trợ giúp
+</div>
+
+<script>
+  const totalSlides = 17;
+  let currentSlide = 0;
+  const slidesWrapper = document.getElementById('slidesWrapper');
+
+  // Tạo slides từ HTML files
+  function initializeSlides() {
+    for (let i = 1; i <= totalSlides; i++) {
+      const slideFrame = document.createElement('div');
+      slideFrame.className = 'slide-frame' + (i === 1 ? ' active' : '');
+      slideFrame.id = `slide-${i}`;
+
+      const iframe = document.createElement('iframe');
+      iframe.src = `Slide ${i}.html`;
+      iframe.setAttribute('data-slide', i);
+
+      slideFrame.appendChild(iframe);
+      slidesWrapper.appendChild(slideFrame);
+    }
+
+    updateUI();
+  }
+
+  function showSlide(n) {
+    const slides = document.querySelectorAll('.slide-frame');
+    
+    if (n >= totalSlides) {
+      currentSlide = totalSlides - 1;
+    } else if (n < 0) {
+      currentSlide = 0;
+    } else {
+      currentSlide = n;
+    }
+
+    slides.forEach((slide, index) => {
+      slide.classList.remove('active', 'prev');
+      if (index === currentSlide) {
+        slide.classList.add('active');
+      } else if (index < currentSlide) {
+        slide.classList.add('prev');
+      }
+    });
+
+    updateUI();
+  }
+
+  function nextSlide() {
+    showSlide(currentSlide + 1);
+  }
+
+  function previousSlide() {
+    showSlide(currentSlide - 1);
+  }
+
+  function updateUI() {
+    document.getElementById('currentSlide').textContent = currentSlide + 1;
+    document.getElementById('totalSlides').textContent = totalSlides;
+    
+    const progress = ((currentSlide + 1) / totalSlides) * 100;
+    document.getElementById('progressFill').style.width = progress + '%';
+
+    document.getElementById('prevBtn').disabled = currentSlide === 0;
+    document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+  }
+
+  function toggleFullscreen() {
+    const elem = document.documentElement;
+    if (!document.fullscreenElement) {
+      elem.requestFullscreen().catch(err => {
+        alert(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  }
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'ArrowRight' || event.code === 'Space') {
+      event.preventDefault();
+      nextSlide();
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      previousSlide();
+    } else if (event.key === 'f' || event.key === 'F') {
+      event.preventDefault();
+      toggleFullscreen();
+    } else if (event.key === '?') {
+      toggleKeyboardHint();
+    } else if (event.key === 'Home') {
+      event.preventDefault();
+      showSlide(0);
+    } else if (event.key === 'End') {
+      event.preventDefault();
+      showSlide(totalSlides - 1);
+    }
+  });
+
+  function toggleKeyboardHint() {
+    const hint = document.getElementById('keyboardHint');
+    hint.classList.toggle('show');
+    if (hint.classList.contains('show')) {
+      setTimeout(() => hint.classList.remove('show'), 3000);
+    }
+  }
+
+  // Show keyboard hint on first load
+  window.addEventListener('load', function() {
+    initializeSlides();
+    setTimeout(() => {
+      document.getElementById('keyboardHint').classList.add('show');
+      setTimeout(() => document.getElementById('keyboardHint').classList.remove('show'), 3000);
+    }, 500);
+  });
+
+  // Update progress on fullscreen change
+  document.addEventListener('fullscreenchange', function() {
+    const btn = document.getElementById('fullscreenBtn');
+    btn.textContent = document.fullscreenElement ? '⛶ Exit Fullscreen' : '⛶ Fullscreen';
+  });
+</script>
+
+</body>
+</html>
