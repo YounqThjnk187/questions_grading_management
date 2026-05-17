@@ -33,7 +33,34 @@ python demo_app.py
 
 ---
 
-## 🛠️ Công nghệ sử dụng
+## � Bài Thuyết Trình & Báo Cáo
+
+### 🎬 Presentation (17 Slides)
+- **📄 HTML Version** (Khuyến nghị): `SLIDE/presentation.html`
+  - Mở trực tiếp trên browser
+  - Điều hướng mượt (← → hoặc Space)
+  - Fullscreen mode
+  - Hotkeys: F (fullscreen), ? (help)
+
+- **📊 PowerPoint Version**: `SLIDE/PRESENTATION.pptx`
+  - Sẵn sàng để chỉnh sửa trong PowerPoint
+  - Tất cả 17 slides đã được tích hợp
+
+- **🎨 Canva AI Prompt**: `SLIDE/CANVA_AI_PROMPT.md`
+  - Chi tiết về design (màu, font, layout)
+  - Hướng dẫn từng slide
+  - Copy vào Canva AI để tạo slides đẹp hơn
+
+### 📋 Báo Cáo Toàn Bộ
+- **📖 Word Document**: `QuanLyRaDeChamThi/BaoCao/BAO_CAO_HOAN_CHINH.docx`
+  - Tổng hợp 16 file Markdown
+  - Bao gồm tất cả 9 chương
+  - Mục lục tự động + đánh số chương
+  - Sẵn sàng in hoặc nộp
+
+---
+
+## �🛠️ Công nghệ sử dụng
 
 ### Backend chính (ASP.NET)
 - **Framework**: ASP.NET MVC 5, C#
@@ -152,37 +179,42 @@ Mở trình duyệt: `http://localhost:8080/login`
 
 ## 🗂️ Cấu trúc project
 ```
-QuanLyRaDeChamThi/
-├── 📁 QuanLyRaDeChamThi/ (ASP.NET MVC)
-│   ├── App_Start/
-│   │   ├── BundleConfig.cs
-│   │   ├── FilterConfig.cs
-│   │   └── RouteConfig.cs
-│   ├── Controllers/
-│   │   ├── AccountController.cs    # Đăng nhập
-│   │   ├── CauHoiController.cs     # CRUD câu hỏi
-│   │   ├── DeThiController.cs      # Soạn đề
-│   │   ├── KetQuaController.cs     # Nhập điểm
-│   │   ├── BaoCaoController.cs     # Báo cáo
-│   │   └── ThamSoController.cs     # Tham số
-│   ├── Models/
-│   │   ├── AppDB.cs                # EF DbContext
-│   │   ├── GiangVienModel.cs
-│   │   ├── CauHoiModel.cs
-│   │   ├── DeThiModel.cs
-│   │   ├── KetQuaModel.cs
-│   │   └── ViewModels/
-│   ├── Views/
-│   │   ├── Account/Login.cshtml
-│   │   ├── CauHoi/*.cshtml
-│   │   ├── DeThi/*.cshtml
-│   │   └── Shared/_Layout.cshtml
-│   └── Web.config
-├── 📁 Database/
-│   └── QuanLyRaDeChamThi.sql      # SQL Script
-├── 📄 demo_app.py                  # Python Demo Server
-├── 📄 README.md
-└── 📄 .gitignore
+.
+├── 📁 QuanLyRaDeChamThi/
+│   ├── 📁 QuanLyRaDeChamThi/ (ASP.NET MVC)
+│   │   ├── App_Start/
+│   │   │   ├── BundleConfig.cs
+│   │   │   ├── FilterConfig.cs
+│   │   │   └── RouteConfig.cs
+│   │   ├── Controllers/
+│   │   │   ├── AccountController.cs    # Đăng nhập
+│   │   │   ├── CauHoiController.cs     # CRUD câu hỏi
+│   │   │   ├── DeThiController.cs      # Soạn đề
+│   │   │   ├── KetQuaController.cs     # Nhập điểm
+│   │   │   ├── BaoCaoController.cs     # Báo cáo
+│   │   │   └── ThamSoController.cs     # Tham số
+│   │   ├── Models/
+│   │   ├── Views/
+│   │   └── Web.config
+│   ├── 📁 BaoCao/
+│   │   ├── 📄 BAO_CAO_HOAN_CHINH.docx  ⭐ Báo cáo Word (tổng hợp)
+│   │   ├── 00_BIA.md
+│   │   ├── 01_NHANXET.md
+│   │   ├── ... (01-15: 16 file Markdown)
+│   │   └── 15_KETLUAN_TAILIEU.md
+│   ├── 📁 Database/
+│   │   └── QuanLyRaDeChamThi.sql
+│   ├── 📄 demo_app.py
+│   └── 📄 README.md
+├── 📁 SLIDE/
+│   ├── 📄 presentation.html             ⭐ Thuyết trình HTML (17 slides)
+│   ├── 📄 PRESENTATION.pptx             ⭐ Thuyết trình PowerPoint
+│   ├── 📄 CANVA_AI_PROMPT.md            ⭐ Hướng dẫn Canva AI
+│   ├── Slide 1.html
+│   ├── Slide 2.html
+│   ├── ... (Slide 3-17)
+│   └── Slide 17.html
+└── 📄 README.md
 ```
 
 ---
@@ -220,7 +252,74 @@ QuanLyRaDeChamThi/
 
 ---
 
-## 🤝 Contributing
+## 📦 Các File Deliverable
+
+### 📊 Báo Cáo
+| File | Định dạng | Mô tả |
+|------|-----------|-------|
+| `BAO_CAO_HOAN_CHINH.docx` | Word | Báo cáo 120+ trang, gộp từ 16 file MD |
+| `BaoCao/` | Markdown | 16 file MD chi tiết (9 chương) |
+
+### 🎬 Thuyết Trình
+| File | Định dạng | Mô tả | Cách sử dụng |
+|------|-----------|-------|-------------|
+| `presentation.html` | HTML | **Khuyến nghị** - 17 slides tương tác | Mở trên browser, dùng arrow keys |
+| `PRESENTATION.pptx` | PowerPoint | Có thể chỉnh sửa trong PowerPoint | Mở bằng PowerPoint/Google Slides |
+| `Slide [1-17].html` | HTML | Các slide riêng lẻ | Mở từng file trên browser |
+| `CANVA_AI_PROMPT.md` | Markdown | Prompt chi tiết cho Canva AI | Copy vào Canva để tạo slides |
+
+### 🔧 Mã Nguồn
+| File | Định dạng | Mô tả |
+|------|-----------|-------|
+| `QuanLyRaDeChamThi.sln` | Visual Studio | Solution chính (ASP.NET MVC) |
+| `demo_app.py` | Python | Demo server (không cần VS) |
+| `Database/QuanLyRaDeChamThi.sql` | SQL | Script database |
+
+---
+
+## 🎯 Hướng Dẫn Sử Dụng Các File
+
+### 📖 Báo Cáo Word
+```
+1. Mở file: QuanLyRaDeChamThi/BaoCao/BAO_CAO_HOAN_CHINH.docx
+2. Bao gồm: Bìa, tóm tắt, mục lục, 9 chương, kết luận
+3. Có thể: In ra, chỉnh sửa, nộp cho giảng viên
+```
+
+### 🎬 Thuyết Trình HTML (Tối ưu nhất)
+```
+1. Mở browser: file:///path/to/SLIDE/presentation.html
+2. Điều hướng:
+   • Click button Trước/Tiếp
+   • Dùng phím ← → 
+   • Space để tiếp
+   • F để fullscreen
+   • ? để xem trợ giúp
+3. Lợi ích: Mượt, chuyên nghiệp, không cần PowerPoint
+```
+
+### 📊 PowerPoint (.pptx)
+```
+1. Mở PowerPoint/Google Slides
+2. Tải file: SLIDE/PRESENTATION.pptx
+3. Có thể:
+   • Chỉnh sửa nội dung
+   • Thêm ảnh, animation
+   • Export thành PDF
+   • Chia sẻ online
+```
+
+### 🎨 Tạo Slides Canva (Nâng cao)
+```
+1. Đọc file: SLIDE/CANVA_AI_PROMPT.md
+2. Copy prompt từ file
+3. Vào Canva.com → Create design → Presentation
+4. Paste prompt vào Canva AI (nếu có)
+5. Tùy chỉnh theo yêu cầu
+6. Export thành PDF hoặc PPTX
+```
+
+---
 
 Contributions are welcome! Vui lòng:
 1. Fork repo này
