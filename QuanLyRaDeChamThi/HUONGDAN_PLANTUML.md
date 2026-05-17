@@ -1200,7 +1200,3 @@ Invoke-WebRequest -Uri "https://sourceforge.net/projects/plantuml/files/plantuml
 # Tăng DPI
 java -DPLANTUML_LIMIT_SIZE=8192 -jar plantuml.jar -tpng *.puml
 ```
-
----
-
-**Chúc bạn generate diagrams thành công! 📊✨**

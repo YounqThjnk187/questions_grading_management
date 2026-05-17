@@ -5,7 +5,7 @@
 [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-4.6.1-512BD4)](https://dotnet.microsoft.com/)
 [![Python Demo](https://img.shields.io/badge/Python-3.11-3776AB)](https://www.python.org/)
 
-## ⚡ Quick Start - Python Demo
+## Quick Start - Python Demo
 
 **Chạy nhanh demo (không cần Visual Studio):**
 
@@ -21,7 +21,7 @@ python demo_app.py
 
 ---
 
-## �🛠️ Công nghệ sử dụng
+## Công nghệ sử dụng
 
 ### Backend chính (ASP.NET)
 - **Framework**: ASP.NET MVC 5, C#
@@ -37,7 +37,7 @@ python demo_app.py
 
 ---
 
-## 📦 Hướng dẫn cài đặt
+## Hướng dẫn cài đặt
 
 ### Phương án 1: Chạy Python Demo (Khuyến nghị để test nhanh)
 
@@ -76,7 +76,7 @@ Mở trình duyệt: `http://localhost:8080/login`
 
 ---
 
-## ✨ Tính năng
+## Tính năng
 
 ### Chức năng cơ bản (theo yêu cầu đồ án)
 1. **📝 Quản lý ngân hàng câu hỏi**
@@ -243,45 +243,6 @@ Project/ (Root)
 
 ---
 
-## 📦 Các File Deliverable
-
-### � Tài liệu 9 chương (DOCUMENT/)
-| Folder | Mô tả |
-|--------|-------|
-| `Chuong 1 - Tong quan` | Tổng quan dự án, mục tiêu |
-| `Chuong 2 - Xac dinh yeu cau` | Xác định yêu cầu hệ thống |
-| `Chuong 3 - Phan tich yeu cau` | Phân tích yêu cầu chi tiết |
-| `Chuong 4 - Thiet ke he thong` | Thiết kế kiến trúc hệ thống |
-| `Chuong 5 - Thiet ke doi tuong` | Thiết kế các đối tượng |
-| `Chuong 6 - Thiet ke du lieu` | Thiết kế database schema |
-| `Chuong 7 - Thiet ke giao dien` | Thiết kế giao diện người dùng |
-| `Chuong 8 - Cai dat phan mem` | Cài đặt và triển khai |
-| `Chuong 9 - Kiem thu va bao tri` | Kiểm thử và bảo trì |
-| `TÀI LIỆU HƯỚNG DẪN THỰC HÀNH` | Tài liệu hướng dẫn practice |
-
-### 📊 Báo Cáo (QuanLyRaDeChamThi/BaoCao/)
-| File | Định dạng | Mô tả |
-|------|-----------|-------|
-| `BAO_CAO_HOAN_CHINH.docx` | Word | **Báo cáo tổng hợp 120+ trang** - gộp từ 16 file MD |
-| `BaoCao/` | Markdown | 16 file MD chi tiết (có thể chỉnh sửa riêng lẻ) |
-
-### 🎬 Thuyết Trình (SLIDE/)
-| File | Định dạng | Mô tả | Cách sử dụng |
-|------|-----------|-------|-------------|
-| `presentation.html` | HTML | **Khuyến nghị** - 17 slides tương tác | Mở trên browser, ← → điều hướng |
-| `PRESENTATION.pptx` | PowerPoint | Tất cả 17 slides - có thể chỉnh sửa | Mở bằng PowerPoint |
-| `Slide [1-17].html` | HTML | Các slide riêng lẻ | Mở từng file trên browser |
-| `CANVA_AI_PROMPT.md` | Markdown | Prompt chi tiết cho Canva AI | Copy vào Canva để tạo slides |
-
-### 🔧 Mã Nguồn (QuanLyRaDeChamThi/)
-| File | Định dạng | Mô tả |
-|------|-----------|-------|
-| `QuanLyRaDeChamThi.sln` | Visual Studio | Solution chính (ASP.NET MVC full) |
-| `demo_app.py` | Python | Demo server (chạy không cần VS) |
-| `Database/QuanLyRaDeChamThi.sql` | SQL | Script tạo database + dữ liệu mẫu |
-
----
-
 Contributions are welcome! Vui lòng:
 1. Fork repo này
 2. Tạo branch mới (`git checkout -b feature/AmazingFeature`)
@@ -295,15 +256,6 @@ Contributions are welcome! Vui lòng:
 
 Đồ án môn học SE104.Q23 - Nhập môn Công nghệ phần mềm  
 Trường Đại học Công nghệ Thông tin - ĐHQG TP.HCM
-
----
-
-## 📧 Contact
-
-Nhóm 15 - SE104.Q23
-
-- GitHub: [https://github.com/YounqThjnk187/questions_grading_management](https://github.com/YounqThjnk187/questions_grading_management)
-- Email: 23521498@gm.uit.edu.vn
 
 ---
 

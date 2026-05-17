@@ -303,35 +303,4 @@ Tất cả diagrams đều vẽ bằng **ASCII art** để dễ đọc trong tex
 
 ---
 
-## 📧 Liên hệ
 
-**Nhóm 15:**
-- 👨‍💻 Trương Vũ Minh Tân (21521417) - Nhóm trưởng
-- 🎨 Thạch Via Sa Na (23520966) - Frontend
-- 🧪 Hà Trọng Nghĩa (23521008) - Tester
-- 📊 Dương Quốc Thịnh (23521498) - Business Logic
-
-**Email:** 21521417@gm.uit.edu.vn  
-**GitHub:** https://github.com/YounqThjnk187/questions_grading_management
-
----
-
-## 📜 License
-
-© 2026 Nhóm 15 - Đồ án SE104.Q23 - UIT  
-Tài liệu này chỉ phục vụ mục đích học tập.
-
----
-
-## 🙏 Lời cảm ơn
-
-Chúng em xin chân thành cảm ơn:
-- **ThS. Nguyễn Thị Thanh Trúc** - Giảng viên hướng dẫn tận tình
-- **Khoa Công nghệ Phần mềm, UIT** - Cung cấp kiến thức nền tảng
-- **Các bạn trong nhóm** - Hợp tác và hỗ trợ lẫn nhau
-- **Gia đình** - Động viên tinh thần
-
----
-
-**📚 Chúc các bạn đọc báo cáo vui vẻ!**  
-**✨ Good luck với đồ án của mình!**
