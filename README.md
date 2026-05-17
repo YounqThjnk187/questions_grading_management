@@ -1,21 +1,9 @@
-# 🎓 Hệ thống Quản lý Ra đề và Chấm thi
+#  Hệ thống Quản lý Ra đề và Chấm thi
 ## Nhóm 15 – SE104.Q23
 
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/YounqThjnk187/questions_grading_management)
 [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-4.6.1-512BD4)](https://dotnet.microsoft.com/)
 [![Python Demo](https://img.shields.io/badge/Python-3.11-3776AB)](https://www.python.org/)
-
----
-
-## 👥 Thành viên nhóm
-| Họ tên | MSSV |
-|---|---|
-| Trương Vũ Minh Tân | 21521417 |
-| Thạch Via Sa Na | 23520966 |
-| Hà Trọng Nghĩa | 23521008 |
-| Dương Quốc Thịnh | 23521498 |
-
----
 
 ## ⚡ Quick Start - Python Demo
 
@@ -30,33 +18,6 @@ python demo_app.py
 ```
 
 **Yêu cầu:** Python 3.11+ (không cần thư viện ngoài)
-
----
-
-## � Bài Thuyết Trình & Báo Cáo
-
-### 🎬 Presentation (17 Slides)
-- **📄 HTML Version** (Khuyến nghị): `SLIDE/presentation.html`
-  - Mở trực tiếp trên browser
-  - Điều hướng mượt (← → hoặc Space)
-  - Fullscreen mode
-  - Hotkeys: F (fullscreen), ? (help)
-
-- **📊 PowerPoint Version**: `SLIDE/PRESENTATION.pptx`
-  - Sẵn sàng để chỉnh sửa trong PowerPoint
-  - Tất cả 17 slides đã được tích hợp
-
-- **🎨 Canva AI Prompt**: `SLIDE/CANVA_AI_PROMPT.md`
-  - Chi tiết về design (màu, font, layout)
-  - Hướng dẫn từng slide
-  - Copy vào Canva AI để tạo slides đẹp hơn
-
-### 📋 Báo Cáo Toàn Bộ
-- **📖 Word Document**: `QuanLyRaDeChamThi/BaoCao/BAO_CAO_HOAN_CHINH.docx`
-  - Tổng hợp 16 file Markdown
-  - Bao gồm tất cả 9 chương
-  - Mục lục tự động + đánh số chương
-  - Sẵn sàng in hoặc nộp
 
 ---
 
@@ -181,7 +142,7 @@ Mở trình duyệt: `http://localhost:8080/login`
 
 ```
 Project/ (Root)
-├── 📁 DOCUMENT/ ⭐ Tài liệu 9 chương (theo yêu cầu đồ án)
+├── 📁 DOCUMENT/ ⭐ Tài liệu 9 chương
 │   ├── Chuong 1 - Tong quan/
 │   ├── Chuong 2 - Xac dinh yeu cau/
 │   ├── Chuong 3 - Phan tich yeu cau/
@@ -191,7 +152,8 @@ Project/ (Root)
 │   ├── Chuong 7 - Thiet ke giao dien/
 │   ├── Chuong 8 - Cai dat phan mem/
 │   ├── Chuong 9 - Kiem thu va bao tri/
-│   └── TÀI LIỆU HƯỚNG DẪN THỰC HÀNH/
+│   ├── TÀI LIỆU HƯỚNG DẪN THỰC HÀNH/
+│   └── CNPM Project/    
 │
 ├── 📁 QuanLyRaDeChamThi/ (ASP.NET MVC Project)
 │   ├── 📁 QuanLyRaDeChamThi/ (Main project)
@@ -237,27 +199,9 @@ Project/ (Root)
 │   ├── HUONGDAN_PLANTUML.md
 │   └── README.md
 │
-├── 📁 SLIDE/ ⭐ Bài thuyết trình 17 slides (Root level)
-│   ├── 📄 presentation.html             ⭐ (Khuyến nghị - tương tác)
-│   ├── 📄 PRESENTATION.pptx             ⭐ (PowerPoint)
-│   ├── 📄 CANVA_AI_PROMPT.md            ⭐ (Hướng dẫn Canva AI)
-│   ├── Slide 1.html  - Cover
-│   ├── Slide 2.html  - Team
-│   ├── Slide 3.html  - Problems
-│   ├── Slide 4.html  - Objectives
-│   ├── Slide 5.html  - Tech Stack
-│   ├── Slide 6.html  - Features 1/2
-│   ├── Slide 7.html  - Features 2/2
-│   ├── Slide 8.html  - UI Login
-│   ├── Slide 9.html  - UI Dashboard
-│   ├── Slide 10.html - UI Questions
-│   ├── Slide 11.html - Database
-│   ├── Slide 12.html - Performance
-│   ├── Slide 13.html - Testing
-│   ├── Slide 14.html - Demo Video
-│   ├── Slide 15.html - Challenges
-│   ├── Slide 16.html - Results & Roadmap
-│   └── Slide 17.html - Q&A
+├── 📁 SLIDE/ 
+│   └── Modern_Exam_SaaS
+│   
 │
 ├── 📁 Reference/ (Tài liệu tham khảo)
 │
@@ -338,50 +282,6 @@ Project/ (Root)
 
 ---
 
-## 🎯 Hướng Dẫn Sử Dụng Các File
-
-### 📖 Báo Cáo Word
-```
-1. Mở file: QuanLyRaDeChamThi/BaoCao/BAO_CAO_HOAN_CHINH.docx
-2. Bao gồm: Bìa, tóm tắt, mục lục, 9 chương, kết luận
-3. Có thể: In ra, chỉnh sửa, nộp cho giảng viên
-```
-
-### 🎬 Thuyết Trình HTML (Tối ưu nhất)
-```
-1. Mở browser: file:///path/to/SLIDE/presentation.html
-2. Điều hướng:
-   • Click button Trước/Tiếp
-   • Dùng phím ← → 
-   • Space để tiếp
-   • F để fullscreen
-   • ? để xem trợ giúp
-3. Lợi ích: Mượt, chuyên nghiệp, không cần PowerPoint
-```
-
-### 📊 PowerPoint (.pptx)
-```
-1. Mở PowerPoint/Google Slides
-2. Tải file: SLIDE/PRESENTATION.pptx
-3. Có thể:
-   • Chỉnh sửa nội dung
-   • Thêm ảnh, animation
-   • Export thành PDF
-   • Chia sẻ online
-```
-
-### 🎨 Tạo Slides Canva (Nâng cao)
-```
-1. Đọc file: SLIDE/CANVA_AI_PROMPT.md
-2. Copy prompt từ file
-3. Vào Canva.com → Create design → Presentation
-4. Paste prompt vào Canva AI (nếu có)
-5. Tùy chỉnh theo yêu cầu
-6. Export thành PDF hoặc PPTX
-```
-
----
-
 Contributions are welcome! Vui lòng:
 1. Fork repo này
 2. Tạo branch mới (`git checkout -b feature/AmazingFeature`)
@@ -411,7 +311,6 @@ Nhóm 15 - SE104.Q23
 
 - Bootstrap 3 framework
 - Entity Framework 6
-- Tham khảo: [Bookstore Management System](https://github.com/hoangtv2000/bookstore_management)
 
 ---
 
