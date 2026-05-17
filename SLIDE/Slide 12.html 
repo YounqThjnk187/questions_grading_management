@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<title>12 — Performance</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>body { margin:0; padding:0; overflow:hidden; font-family:'Be Vietnam Pro', system-ui, sans-serif; color:#0F172A; -webkit-font-smoothing:antialiased; }</style>
+</head>
+<body>
+<div class="slide-container" data-screen-label="12 Hiệu năng" style="position:relative; width:1920px; height:1080px; overflow:hidden; background:#FAFBFF;">
+
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:-200px; top:600px; width:700px; height:700px; border-radius:50%; background:radial-gradient(circle at center, rgba(16,185,129,0.12), rgba(16,185,129,0) 60%); z-index:1;"></div>
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1500px; top:-200px; width:700px; height:700px; border-radius:50%; background:radial-gradient(circle at center, rgba(6,182,212,0.10), rgba(6,182,212,0) 60%); z-index:1;"></div>
+
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:120px; top:80px; width:500px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:600; color:#10B981; letter-spacing:3px;">11 / HIỆU NĂNG</div>
+  </div>
+
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:120px; top:120px; width:1680px; z-index:10;">
+    <div style="font-size:80px; font-weight:800; line-height:1.1; letter-spacing:-1.5px; color:#0F172A;">Nhanh hơn <span style="background:linear-gradient(135deg, #10B981, #06B6D4); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">70%</span> — đạt 5 ⁄ 5 chỉ tiêu</div>
+  </div>
+
+  <!-- Top stats badges -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:120px; top:280px; width:1680px; height:160px; background:linear-gradient(135deg, #0F172A 0%, #1E293B 100%); border-radius:24px; z-index:1; box-shadow:0 24px 50px rgba(15,23,42,0.20);"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:160px; top:312px; width:1600px; z-index:10; display:flex; align-items:center; justify-content:space-between;">
+    <div style="text-align:left;">
+      <div style="font-size:12px; font-weight:700; color:rgba(255,255,255,0.6); letter-spacing:2.5px;">PAGE LOAD</div>
+      <div style="margin-top:8px;">
+        <span style="font-family:'JetBrains Mono', monospace; font-size:54px; font-weight:800; color:#06B6D4; line-height:1;">150</span>
+        <span style="font-size:22px; color:rgba(255,255,255,0.7); margin-left:6px;">ms</span>
+      </div>
+      <div style="font-size:13px; color:#10B981; margin-top:6px; font-weight:600;">▲ -70% từ 500ms</div>
+    </div>
+    <div style="text-align:left;">
+      <div style="font-size:12px; font-weight:700; color:rgba(255,255,255,0.6); letter-spacing:2.5px;">DB QUERY</div>
+      <div style="margin-top:8px;">
+        <span style="font-family:'JetBrains Mono', monospace; font-size:54px; font-weight:800; color:#EC4899; line-height:1;">15</span>
+        <span style="font-size:22px; color:rgba(255,255,255,0.7); margin-left:6px;">ms</span>
+      </div>
+      <div style="font-size:13px; color:#10B981; margin-top:6px; font-weight:600;">▲ -70% từ 50ms</div>
+    </div>
+    <div style="text-align:left;">
+      <div style="font-size:12px; font-weight:700; color:rgba(255,255,255,0.6); letter-spacing:2.5px;">CONCURRENT</div>
+      <div style="margin-top:8px;">
+        <span style="font-family:'JetBrains Mono', monospace; font-size:54px; font-weight:800; color:#F59E0B; line-height:1;">60</span>
+        <span style="font-size:22px; color:rgba(255,255,255,0.7); margin-left:6px;">users</span>
+      </div>
+      <div style="font-size:13px; color:#10B981; margin-top:6px; font-weight:600;">▲ +200% từ 20</div>
+    </div>
+    <div style="text-align:left;">
+      <div style="font-size:12px; font-weight:700; color:rgba(255,255,255,0.6); letter-spacing:2.5px;">MEMORY</div>
+      <div style="margin-top:8px;">
+        <span style="font-family:'JetBrains Mono', monospace; font-size:54px; font-weight:800; color:#10B981; line-height:1;">50</span>
+        <span style="font-size:22px; color:rgba(255,255,255,0.7); margin-left:6px;">MB</span>
+      </div>
+      <div style="font-size:13px; color:#10B981; margin-top:6px; font-weight:600;">▲ -37% từ 80MB</div>
+    </div>
+    <div style="text-align:left;">
+      <div style="font-size:12px; font-weight:700; color:rgba(255,255,255,0.6); letter-spacing:2.5px;">TARGET</div>
+      <div style="margin-top:8px;">
+        <span style="font-family:'JetBrains Mono', monospace; font-size:54px; font-weight:800; color:#10B981; line-height:1;">5/5</span>
+      </div>
+      <div style="font-size:13px; color:#10B981; margin-top:6px; font-weight:600;">✓ ĐẠT 100%</div>
+    </div>
+  </div>
+
+  <!-- LEFT: Before/After bar chart -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:120px; top:480px; width:1100px; height:500px; background:white; border-radius:20px; z-index:1; box-shadow:0 16px 40px rgba(15,23,42,0.06); border:1px solid #E2E8F0;"></div>
+
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:160px; top:506px; width:1020px; z-index:10;">
+    <div style="font-size:13px; font-weight:700; color:#94A3B8; letter-spacing:2.5px;">BENCHMARK COMPARISON</div>
+    <div style="font-size:28px; font-weight:800; color:#0F172A; margin-top:4px;">Trước &amp; Sau tối ưu</div>
+  </div>
+
+  <!-- Bar chart group 1: Page Load -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:160px; top:590px; width:240px; z-index:10;">
+    <div style="font-size:15px; font-weight:700; color:#475569;">Page Load Time</div>
+  </div>
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:160px; top:618px; width:760px; height:34px; background:#FEE2E2; border-radius:8px; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:170px; top:618px; width:740px; height:34px; z-index:10; display:flex; align-items:center; justify-content:space-between;">
+    <span style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:#991B1B;">BEFORE</span>
+    <span style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:#991B1B;">500 ms</span>
+  </div>
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:160px; top:660px; width:228px; height:34px; background:linear-gradient(90deg, #10B981, #059669); border-radius:8px; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:170px; top:660px; width:208px; height:34px; z-index:10; display:flex; align-items:center; justify-content:space-between;">
+    <span style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:white;">AFTER</span>
+    <span style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:white;">150ms</span>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:940px; top:632px; width:240px; height:54px; z-index:10; display:flex; align-items:center;">
+    <span style="font-family:'JetBrains Mono', monospace; font-size:24px; font-weight:800; color:#059669;">-70% ✓</span>
+  </div>
+
+  <!-- Bar chart group 2: Query -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:160px; top:720px; width:240px; z-index:10;">
+    <div style="font-size:15px; font-weight:700; color:#475569;">Database Query</div>
+  </div>
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:160px; top:748px; width:760px; height:34px; background:#FEE2E2; border-radius:8px; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:170px; top:748px; width:740px; height:34px; z-index:10; display:flex; align-items:center; justify-content:space-between;">
+    <span style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:#991B1B;">BEFORE</span>
+    <span style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:#991B1B;">50 ms</span>
+  </div>
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:160px; top:790px; width:228px; height:34px; background:linear-gradient(90deg, #10B981, #059669); border-radius:8px; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:170px; top:790px; width:208px; height:34px; z-index:10; display:flex; align-items:center; justify-content:space-between;">
+    <span style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:white;">AFTER</span>
+    <span style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:white;">15ms</span>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:940px; top:762px; width:240px; height:54px; z-index:10; display:flex; align-items:center;">
+    <span style="font-family:'JetBrains Mono', monospace; font-size:24px; font-weight:800; color:#059669;">-70% ✓</span>
+  </div>
+
+  <!-- Bar chart group 3: Concurrent -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:160px; top:850px; width:240px; z-index:10;">
+    <div style="font-size:15px; font-weight:700; color:#475569;">Concurrent Users</div>
+  </div>
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:160px; top:878px; width:253px; height:34px; background:#FEE2E2; border-radius:8px; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:170px; top:878px; width:233px; height:34px; z-index:10; display:flex; align-items:center; justify-content:space-between;">
+    <span style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:#991B1B;">BEFORE</span>
+    <span style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:#991B1B;">20</span>
+  </div>
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:160px; top:920px; width:760px; height:34px; background:linear-gradient(90deg, #10B981, #06B6D4); border-radius:8px; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:170px; top:920px; width:740px; height:34px; z-index:10; display:flex; align-items:center; justify-content:space-between;">
+    <span style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:white;">AFTER</span>
+    <span style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:white;">60 users</span>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:940px; top:892px; width:240px; height:54px; z-index:10; display:flex; align-items:center;">
+    <span style="font-family:'JetBrains Mono', monospace; font-size:24px; font-weight:800; color:#059669;">+200% ✓</span>
+  </div>
+
+  <!-- RIGHT: Optimization techniques -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1260px; top:500px; width:540px; z-index:10;">
+    <div style="font-size:14px; font-weight:700; letter-spacing:2.5px; color:#94A3B8; text-transform:uppercase;">Kỹ thuật tối ưu</div>
+  </div>
+
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1260px; top:546px; width:540px; height:100px; background:white; border-radius:14px; z-index:1; box-shadow:0 10px 24px rgba(15,23,42,0.06); border-left:5px solid #4F46E5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1290px; top:560px; width:480px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:#4F46E5; letter-spacing:1.5px;">⊕ CONNECTION POOLING</div>
+    <div style="font-size:20px; font-weight:700; color:#0F172A; margin-top:4px;">min=5 · max=100</div>
+    <div style="font-size:14px; color:#64748B; margin-top:2px;">Tái sử dụng kết nối, giảm overhead bắt tay TCP.</div>
+  </div>
+
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1260px; top:660px; width:540px; height:100px; background:white; border-radius:14px; z-index:1; box-shadow:0 10px 24px rgba(15,23,42,0.06); border-left:5px solid #06B6D4;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1290px; top:674px; width:480px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:#0891B2; letter-spacing:1.5px;">⊕ DATABASE INDEXING</div>
+    <div style="font-size:20px; font-weight:700; color:#0F172A; margin-top:4px;">5 indexes · 70-82% nhanh</div>
+    <div style="font-size:14px; color:#64748B; margin-top:2px;">B-tree index trên cột FK &amp; filter thường dùng.</div>
+  </div>
+
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1260px; top:774px; width:540px; height:100px; background:white; border-radius:14px; z-index:1; box-shadow:0 10px 24px rgba(15,23,42,0.06); border-left:5px solid #F59E0B;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1290px; top:788px; width:480px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:#D97706; letter-spacing:1.5px;">⊕ SQLITE WAL MODE</div>
+    <div style="font-size:20px; font-weight:700; color:#0F172A; margin-top:4px;">Cho python demo</div>
+    <div style="font-size:14px; color:#64748B; margin-top:2px;">Write-Ahead Logging — concurrent reads tốt hơn.</div>
+  </div>
+
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1260px; top:888px; width:540px; height:100px; background:white; border-radius:14px; z-index:1; box-shadow:0 10px 24px rgba(15,23,42,0.06); border-left:5px solid #EC4899;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1290px; top:902px; width:480px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:#DB2777; letter-spacing:1.5px;">⊕ OUTPUT CACHING</div>
+    <div style="font-size:20px; font-weight:700; color:#0F172A; margin-top:4px;">ASP.NET cache 60s</div>
+    <div style="font-size:14px; color:#64748B; margin-top:2px;">Cache HTML response cho trang ít thay đổi.</div>
+  </div>
+
+  <!-- Footer -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:120px; top:1020px; width:1680px; z-index:10; display:flex; justify-content:space-between; align-items:center;">
+    <span style="font-size:16px; color:#94A3B8; letter-spacing:2px; font-weight:600;">SE104.Q23 — NHÓM 15</span>
+    <span style="font-family:'JetBrains Mono', monospace; font-size:16px; color:#94A3B8;">12 / 17</span>
+  </div>
+
+</div>
+</body>
+</html>
+

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<title>11 — Database</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>body { margin:0; padding:0; overflow:hidden; font-family:'Be Vietnam Pro', system-ui, sans-serif; color:#0F172A; -webkit-font-smoothing:antialiased; }</style>
+</head>
+<body>
+<div class="slide-container" data-screen-label="11 Database" style="position:relative; width:1920px; height:1080px; overflow:hidden; background:#FAFBFF;">
+
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1500px; top:600px; width:700px; height:700px; border-radius:50%; background:radial-gradient(circle at center, rgba(124,58,237,0.10), rgba(124,58,237,0) 60%); z-index:1;"></div>
+
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:120px; top:80px; width:500px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:600; color:#7C3AED; letter-spacing:3px;">10 / DATABASE</div>
+  </div>
+
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:120px; top:120px; width:1680px; z-index:10;">
+    <div style="font-size:80px; font-weight:800; line-height:1.1; letter-spacing:-1.5px; color:#0F172A;">Thiết kế <span style="background:linear-gradient(135deg, #7C3AED, #06B6D4); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">cơ sở dữ liệu</span> · 11 bảng · 3NF</div>
+  </div>
+
+  <!-- ERD container -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:120px; top:270px; width:300px; z-index:10;">
+    <div style="font-size:14px; font-weight:700; letter-spacing:2.5px; color:#94A3B8; text-transform:uppercase;">ERD · Entity Relationship Diagram</div>
+  </div>
+
+  <!-- GIANG_VIEN entity -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:120px; top:330px; width:300px; height:180px; background:white; border-radius:12px; z-index:5; box-shadow:0 12px 28px rgba(15,23,42,0.08); border:2px solid #4F46E5;"></div>
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:120px; top:330px; width:300px; height:36px; background:#4F46E5; border-radius:10px 10px 0 0; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:120px; top:330px; width:300px; height:36px; z-index:10; display:flex; align-items:center; justify-content:center;">
+    <span style="color:white; font-family:'JetBrains Mono', monospace; font-size:15px; font-weight:700; letter-spacing:1.5px;">GIANG_VIEN</span>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:140px; top:378px; width:260px; z-index:10; font-family:'JetBrains Mono', monospace; font-size:13px; line-height:1.7; color:#334155;">
+    <div><b style="color:#4F46E5;">🔑 MaGV</b> · varchar(10)</div>
+    <div>HoTen · nvarchar(100)</div>
+    <div>MatKhau · varchar(255)</div>
+    <div>Email · varchar(100)</div>
+    <div>MaKhoa · varchar(10) <span style="color:#94A3B8;">FK</span></div>
+  </div>
+
+  <!-- CAU_HOI entity -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:520px; top:330px; width:300px; height:180px; background:white; border-radius:12px; z-index:5; box-shadow:0 12px 28px rgba(15,23,42,0.08); border:2px solid #06B6D4;"></div>
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:520px; top:330px; width:300px; height:36px; background:#06B6D4; border-radius:10px 10px 0 0; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:520px; top:330px; width:300px; height:36px; z-index:10; display:flex; align-items:center; justify-content:center;">
+    <span style="color:white; font-family:'JetBrains Mono', monospace; font-size:15px; font-weight:700; letter-spacing:1.5px;">CAU_HOI</span>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:540px; top:378px; width:260px; z-index:10; font-family:'JetBrains Mono', monospace; font-size:13px; line-height:1.7; color:#334155;">
+    <div><b style="color:#06B6D4;">🔑 MaCH</b> · int</div>
+    <div>NoiDung · nvarchar(2000)</div>
+    <div>DoKho · varchar(20)</div>
+    <div>MaMon · varchar(10) <span style="color:#94A3B8;">FK</span></div>
+    <div>MaGV · varchar(10) <span style="color:#94A3B8;">FK</span></div>
+  </div>
+
+  <!-- DE_THI entity -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:920px; top:330px; width:300px; height:180px; background:white; border-radius:12px; z-index:5; box-shadow:0 12px 28px rgba(15,23,42,0.08); border:2px solid #EC4899;"></div>
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:920px; top:330px; width:300px; height:36px; background:#EC4899; border-radius:10px 10px 0 0; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:920px; top:330px; width:300px; height:36px; z-index:10; display:flex; align-items:center; justify-content:center;">
+    <span style="color:white; font-family:'JetBrains Mono', monospace; font-size:15px; font-weight:700; letter-spacing:1.5px;">DE_THI</span>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:940px; top:378px; width:260px; z-index:10; font-family:'JetBrains Mono', monospace; font-size:13px; line-height:1.7; color:#334155;">
+    <div><b style="color:#EC4899;">🔑 MaDe</b> · int</div>
+    <div>TenDe · nvarchar(200)</div>
+    <div>HocKy · int · Nam · int</div>
+    <div>MaMon · varchar(10) <span style="color:#94A3B8;">FK</span></div>
+    <div>MaGV · varchar(10) <span style="color:#94A3B8;">FK</span></div>
+  </div>
+
+  <!-- KET_QUA entity -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:920px; top:600px; width:300px; height:180px; background:white; border-radius:12px; z-index:5; box-shadow:0 12px 28px rgba(15,23,42,0.08); border:2px solid #F59E0B;"></div>
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:920px; top:600px; width:300px; height:36px; background:#F59E0B; border-radius:10px 10px 0 0; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:920px; top:600px; width:300px; height:36px; z-index:10; display:flex; align-items:center; justify-content:center;">
+    <span style="color:white; font-family:'JetBrains Mono', monospace; font-size:15px; font-weight:700; letter-spacing:1.5px;">KET_QUA</span>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:940px; top:648px; width:260px; z-index:10; font-family:'JetBrains Mono', monospace; font-size:13px; line-height:1.7; color:#334155;">
+    <div><b style="color:#F59E0B;">🔑 MaKQ</b> · int</div>
+    <div>DiemSo · float</div>
+    <div>DiemChu · varchar(2)</div>
+    <div>MaDe · int <span style="color:#94A3B8;">FK</span></div>
+    <div>MaSV · varchar(10) <span style="color:#94A3B8;">FK</span></div>
+  </div>
+
+  <!-- CT_DE entity (junction N:M) -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:520px; top:600px; width:300px; height:150px; background:#FEF3C7; border-radius:12px; z-index:5; box-shadow:0 12px 28px rgba(15,23,42,0.06); border:2px dashed #D97706;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:540px; top:620px; width:260px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700; color:#92400E; letter-spacing:1.5px;">CT_DE  <span style="font-size:11px; padding:2px 6px; background:#FCD34D; border-radius:4px; margin-left:4px;">JUNCTION</span></div>
+    <div style="font-family:'JetBrains Mono', monospace; font-size:13px; line-height:1.7; color:#78350F; margin-top:6px;">
+      🔑 MaDe · MaCH<br/>
+      DiemSo · float<br/>
+      ThuTu · int
+    </div>
+  </div>
+
+  <!-- MON_HOC + SINH_VIEN + LOP_HOC small -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:120px; top:600px; width:300px; height:60px; background:white; border-radius:10px; z-index:5; box-shadow:0 8px 20px rgba(15,23,42,0.06); border:2px solid #10B981;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:140px; top:600px; width:260px; height:60px; z-index:10; display:flex; align-items:center; justify-content:space-between;">
+    <span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700; color:#059669; letter-spacing:1.5px;">MON_HOC</span>
+    <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#94A3B8;">MaMon · TenMon · SoTC</span>
+  </div>
+
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:120px; top:680px; width:300px; height:60px; background:white; border-radius:10px; z-index:5; box-shadow:0 8px 20px rgba(15,23,42,0.06); border:2px solid #10B981;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:140px; top:680px; width:260px; height:60px; z-index:10; display:flex; align-items:center; justify-content:space-between;">
+    <span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700; color:#059669; letter-spacing:1.5px;">SINH_VIEN</span>
+    <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#94A3B8;">MaSV · HoTen · MaLop</span>
+  </div>
+
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:120px; top:760px; width:300px; height:60px; background:white; border-radius:10px; z-index:5; box-shadow:0 8px 20px rgba(15,23,42,0.06); border:2px solid #10B981;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:140px; top:760px; width:260px; height:60px; z-index:10; display:flex; align-items:center; justify-content:space-between;">
+    <span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700; color:#059669; letter-spacing:1.5px;">LOP_HOC</span>
+    <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#94A3B8;">MaLop · TenLop · Khoa</span>
+  </div>
+
+  <!-- Relationship lines (SVG) -->
+  <svg data-object="true" data-object-type="shape" style="position:absolute; left:120px; top:330px; width:1100px; height:500px; z-index:2; pointer-events:none;">
+    <!-- GV -> CAU_HOI -->
+    <line x1="300" y1="100" x2="400" y2="100" stroke="#94A3B8" stroke-width="2" stroke-dasharray="6,4"/>
+    <text x="335" y="92" font-family="JetBrains Mono" font-size="13" fill="#475569" font-weight="600">1 : N</text>
+    <!-- CAU_HOI -> CT_DE -->
+    <line x1="500" y1="180" x2="500" y2="270" stroke="#94A3B8" stroke-width="2" stroke-dasharray="6,4"/>
+    <text x="508" y="230" font-family="JetBrains Mono" font-size="13" fill="#475569" font-weight="600">N : M</text>
+    <!-- CT_DE -> DE_THI -->
+    <line x1="700" y1="300" x2="800" y2="180" stroke="#94A3B8" stroke-width="2" stroke-dasharray="6,4"/>
+    <!-- DE_THI -> KET_QUA -->
+    <line x1="950" y1="180" x2="950" y2="270" stroke="#94A3B8" stroke-width="2" stroke-dasharray="6,4"/>
+    <text x="958" y="230" font-family="JetBrains Mono" font-size="13" fill="#475569" font-weight="600">1 : N</text>
+  </svg>
+
+  <!-- Bottom stats strip -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:120px; top:860px; width:1100px; height:130px; background:linear-gradient(135deg, #0F172A, #475569); border-radius:18px; z-index:1;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:160px; top:880px; width:1020px; height:100px; z-index:10; display:flex; align-items:center; justify-content:space-between;">
+    <div>
+      <div style="font-family:'JetBrains Mono', monospace; font-size:42px; font-weight:800; color:#06B6D4; line-height:1;">11</div>
+      <div style="font-size:14px; color:rgba(255,255,255,0.7); margin-top:6px; letter-spacing:1px;">BẢNG (TABLES)</div>
+    </div>
+    <div>
+      <div style="font-family:'JetBrains Mono', monospace; font-size:42px; font-weight:800; color:#EC4899; line-height:1;">04</div>
+      <div style="font-size:14px; color:rgba(255,255,255,0.7); margin-top:6px; letter-spacing:1px;">STORED PROCS</div>
+    </div>
+    <div>
+      <div style="font-family:'JetBrains Mono', monospace; font-size:42px; font-weight:800; color:#F59E0B; line-height:1;">05</div>
+      <div style="font-size:14px; color:rgba(255,255,255,0.7); margin-top:6px; letter-spacing:1px;">INDEXES</div>
+    </div>
+    <div>
+      <div style="font-family:'JetBrains Mono', monospace; font-size:42px; font-weight:800; color:#10B981; line-height:1;">3NF</div>
+      <div style="font-size:14px; color:rgba(255,255,255,0.7); margin-top:6px; letter-spacing:1px;">CHUẨN HÓA</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: highlights -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1280px; top:330px; width:520px; height:300px; background:linear-gradient(135deg, #4F46E5, #7C3AED); border-radius:24px; z-index:1; box-shadow:0 24px 50px rgba(79,70,229,0.25);"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1316px; top:362px; width:460px; z-index:10;">
+    <div style="font-size:13px; font-weight:700; color:rgba(255,255,255,0.85); letter-spacing:2px;">PERFORMANCE</div>
+    <div style="font-size:36px; font-weight:800; color:white; margin-top:8px; line-height:1.1;">Indexing tăng tốc <span style="color:#FCD34D;">70-82%</span></div>
+    <div style="font-size:16px; color:rgba(255,255,255,0.9); margin-top:14px; line-height:1.5;">5 indexes trên các cột query thường xuyên: <code style="font-family:'JetBrains Mono', monospace; background:rgba(255,255,255,0.18); padding:2px 6px; border-radius:4px; color:white;">MaMon, MaGV, DoKho</code> · benchmark trên 10k câu hỏi.</div>
+  </div>
+
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1280px; top:650px; width:520px; height:140px; background:white; border-radius:20px; z-index:1; box-shadow:0 12px 28px rgba(15,23,42,0.06); border:1px solid #E2E8F0;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1310px; top:670px; width:460px; z-index:10;">
+    <div style="font-size:13px; font-weight:700; color:#94A3B8; letter-spacing:2px;">STORED PROCEDURES</div>
+    <div style="font-size:20px; font-weight:700; color:#0F172A; margin-top:6px; line-height:1.3;">sp_BaoCaoNam · sp_ThongKeMon ·<br/>sp_DiemTrungBinh · sp_TopCauHoi</div>
+  </div>
+
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1280px; top:810px; width:520px; height:180px; background:white; border-radius:20px; z-index:1; box-shadow:0 12px 28px rgba(15,23,42,0.06); border:1px solid #E2E8F0;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1310px; top:830px; width:460px; z-index:10;">
+    <div style="font-size:13px; font-weight:700; color:#94A3B8; letter-spacing:2px;">CONSTRAINT &amp; INTEGRITY</div>
+    <div style="font-size:16px; color:#334155; margin-top:8px; line-height:1.55;">
+      ✓ Foreign key cascade rule<br/>
+      ✓ Check constraint cho điểm (0 ≤ d ≤ 10)<br/>
+      ✓ Unique constraint mã GV, mã môn<br/>
+      ✓ Transaction ACID cho chấm thi
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:120px; top:1020px; width:1680px; z-index:10; display:flex; justify-content:space-between; align-items:center;">
+    <span style="font-size:16px; color:#94A3B8; letter-spacing:2px; font-weight:600;">SE104.Q23 — NHÓM 15</span>
+    <span style="font-family:'JetBrains Mono', monospace; font-size:16px; color:#94A3B8;">11 / 17</span>
+  </div>
+
+</div>
+</body>
+</html>
+

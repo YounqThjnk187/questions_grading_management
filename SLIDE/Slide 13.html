@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<title>13 — Testing</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>body { margin:0; padding:0; overflow:hidden; font-family:'Be Vietnam Pro', system-ui, sans-serif; color:#0F172A; -webkit-font-smoothing:antialiased; }</style>
+</head>
+<body>
+<div class="slide-container" data-screen-label="13 Kiểm thử" style="position:relative; width:1920px; height:1080px; overflow:hidden; background:#FAFBFF;">
+
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1500px; top:600px; width:700px; height:700px; border-radius:50%; background:radial-gradient(circle at center, rgba(79,70,229,0.10), rgba(79,70,229,0) 60%); z-index:1;"></div>
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:-300px; top:-300px; width:700px; height:700px; border-radius:50%; background:radial-gradient(circle at center, rgba(16,185,129,0.10), rgba(16,185,129,0) 60%); z-index:1;"></div>
+
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:120px; top:80px; width:500px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:600; color:#059669; letter-spacing:3px;">12 / KIỂM THỬ</div>
+  </div>
+
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:120px; top:120px; width:1680px; z-index:10;">
+    <div style="font-size:80px; font-weight:800; line-height:1.1; letter-spacing:-1.5px; color:#0F172A;">29 ⁄ 29 test cases <span style="background:linear-gradient(135deg, #10B981, #06B6D4); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">PASS</span> · 100%</div>
+  </div>
+
+  <!-- LEFT: Test results table -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:120px; top:280px; width:1080px; height:520px; background:white; border-radius:20px; z-index:1; box-shadow:0 16px 40px rgba(15,23,42,0.06); border:1px solid #E2E8F0;"></div>
+
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:160px; top:306px; width:1000px; z-index:10;">
+    <div style="font-size:13px; font-weight:700; color:#94A3B8; letter-spacing:2.5px;">TEST RESULTS · 4 LOẠI KIỂM THỬ</div>
+    <div style="font-size:28px; font-weight:800; color:#0F172A; margin-top:4px;">Bảng kết quả tổng hợp</div>
+  </div>
+
+  <!-- Table header -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:160px; top:386px; width:1000px; height:54px; background:linear-gradient(135deg, #0F172A, #1E293B); border-radius:12px 12px 0 0; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:184px; top:386px; width:960px; height:54px; z-index:10; display:flex; align-items:center;">
+    <span style="flex:1; font-size:13px; font-weight:700; color:rgba(255,255,255,0.8); letter-spacing:1.5px;">LOẠI KIỂM THỬ</span>
+    <span style="width:120px; font-size:13px; font-weight:700; color:rgba(255,255,255,0.8); letter-spacing:1.5px; text-align:center;">TỔNG</span>
+    <span style="width:120px; font-size:13px; font-weight:700; color:rgba(255,255,255,0.8); letter-spacing:1.5px; text-align:center;">PASS</span>
+    <span style="width:120px; font-size:13px; font-weight:700; color:rgba(255,255,255,0.8); letter-spacing:1.5px; text-align:center;">FAIL</span>
+    <span style="width:180px; font-size:13px; font-weight:700; color:rgba(255,255,255,0.8); letter-spacing:1.5px; text-align:center;">PASS RATE</span>
+  </div>
+
+  <!-- Row: Chức năng -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:160px; top:440px; width:1000px; height:64px; background:white; border-bottom:1px solid #F1F5F9; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:184px; top:440px; width:960px; height:64px; z-index:10; display:flex; align-items:center;">
+    <span style="flex:1; display:flex; align-items:center; gap:12px;">
+      <span style="width:36px; height:36px; border-radius:8px; background:#EEF2FF; display:inline-flex; align-items:center; justify-content:center; color:#4F46E5; font-weight:800; font-size:18px;">⊞</span>
+      <span style="font-size:17px; font-weight:700; color:#0F172A;">Chức năng</span>
+    </span>
+    <span style="width:120px; font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:700; color:#0F172A; text-align:center;">15</span>
+    <span style="width:120px; font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:700; color:#059669; text-align:center;">15</span>
+    <span style="width:120px; font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:700; color:#94A3B8; text-align:center;">0</span>
+    <span style="width:180px; text-align:center;"><span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:800; padding:6px 14px; background:#DCFCE7; color:#166534; border-radius:8px;">100% ✓</span></span>
+  </div>
+
+  <!-- Row: Hiệu năng -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:160px; top:504px; width:1000px; height:64px; background:#F8FAFC; border-bottom:1px solid #F1F5F9; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:184px; top:504px; width:960px; height:64px; z-index:10; display:flex; align-items:center;">
+    <span style="flex:1; display:flex; align-items:center; gap:12px;">
+      <span style="width:36px; height:36px; border-radius:8px; background:#ECFEFF; display:inline-flex; align-items:center; justify-content:center; color:#0891B2; font-weight:800; font-size:18px;">⚡</span>
+      <span style="font-size:17px; font-weight:700; color:#0F172A;">Hiệu năng</span>
+    </span>
+    <span style="width:120px; font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:700; color:#0F172A; text-align:center;">5</span>
+    <span style="width:120px; font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:700; color:#059669; text-align:center;">5</span>
+    <span style="width:120px; font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:700; color:#94A3B8; text-align:center;">0</span>
+    <span style="width:180px; text-align:center;"><span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:800; padding:6px 14px; background:#DCFCE7; color:#166534; border-radius:8px;">100% ✓</span></span>
+  </div>
+
+  <!-- Row: Bảo mật -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:160px; top:568px; width:1000px; height:64px; background:white; border-bottom:1px solid #F1F5F9; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:184px; top:568px; width:960px; height:64px; z-index:10; display:flex; align-items:center;">
+    <span style="flex:1; display:flex; align-items:center; gap:12px;">
+      <span style="width:36px; height:36px; border-radius:8px; background:#FEE2E2; display:inline-flex; align-items:center; justify-content:center; color:#DC2626; font-weight:800; font-size:18px;">🔒</span>
+      <span style="font-size:17px; font-weight:700; color:#0F172A;">Bảo mật</span>
+    </span>
+    <span style="width:120px; font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:700; color:#0F172A; text-align:center;">5</span>
+    <span style="width:120px; font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:700; color:#059669; text-align:center;">5</span>
+    <span style="width:120px; font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:700; color:#94A3B8; text-align:center;">0</span>
+    <span style="width:180px; text-align:center;"><span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:800; padding:6px 14px; background:#DCFCE7; color:#166534; border-radius:8px;">100% ✓</span></span>
+  </div>
+
+  <!-- Row: Usability -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:160px; top:632px; width:1000px; height:64px; background:#F8FAFC; border-bottom:1px solid #F1F5F9; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:184px; top:632px; width:960px; height:64px; z-index:10; display:flex; align-items:center;">
+    <span style="flex:1; display:flex; align-items:center; gap:12px;">
+      <span style="width:36px; height:36px; border-radius:8px; background:#FDF2F8; display:inline-flex; align-items:center; justify-content:center; color:#DB2777; font-weight:800; font-size:18px;">★</span>
+      <span style="font-size:17px; font-weight:700; color:#0F172A;">Usability</span>
+    </span>
+    <span style="width:120px; font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:700; color:#0F172A; text-align:center;">4</span>
+    <span style="width:120px; font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:700; color:#059669; text-align:center;">4</span>
+    <span style="width:120px; font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:700; color:#94A3B8; text-align:center;">0</span>
+    <span style="width:180px; text-align:center;"><span style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:800; padding:6px 14px; background:#DCFCE7; color:#166534; border-radius:8px;">100% ✓</span></span>
+  </div>
+
+  <!-- Total row -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:160px; top:696px; width:1000px; height:74px; background:linear-gradient(135deg, #10B981, #06B6D4); border-radius:0 0 12px 12px; z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:184px; top:696px; width:960px; height:74px; z-index:10; display:flex; align-items:center;">
+    <span style="flex:1; font-size:20px; font-weight:800; color:white; letter-spacing:1px;">TỔNG CỘNG</span>
+    <span style="width:120px; font-family:'JetBrains Mono', monospace; font-size:24px; font-weight:800; color:white; text-align:center;">29</span>
+    <span style="width:120px; font-family:'JetBrains Mono', monospace; font-size:24px; font-weight:800; color:white; text-align:center;">29</span>
+    <span style="width:120px; font-family:'JetBrains Mono', monospace; font-size:24px; font-weight:800; color:rgba(255,255,255,0.8); text-align:center;">0</span>
+    <span style="width:180px; text-align:center; font-family:'JetBrains Mono', monospace; font-size:22px; font-weight:800; color:white;">100% ✓</span>
+  </div>
+
+  <!-- RIGHT: Security + Usability cards -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1240px; top:280px; width:560px; z-index:10;">
+    <div style="font-size:14px; font-weight:700; letter-spacing:2.5px; color:#94A3B8; text-transform:uppercase;">Highlights</div>
+  </div>
+
+  <!-- Security card -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1240px; top:326px; width:560px; height:340px; background:linear-gradient(135deg, #EF4444, #DC2626); border-radius:24px; z-index:1; box-shadow:0 24px 50px rgba(239,68,68,0.25);"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1280px; top:354px; width:480px; z-index:10;">
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span style="width:52px; height:52px; border-radius:14px; background:rgba(255,255,255,0.2); display:inline-flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:24px;">🔒</span>
+      <div>
+        <div style="font-size:13px; font-weight:700; color:rgba(255,255,255,0.8); letter-spacing:2px;">SECURITY · 5 ⁄ 5</div>
+        <div style="font-size:28px; font-weight:800; color:white;">Bảo mật toàn diện</div>
+      </div>
+    </div>
+    <div style="font-size:18px; color:white; margin-top:24px; line-height:1.7;">
+      ✓ Chống <b>SQL Injection</b> · Entity FW auto-param<br/>
+      ✓ Chống <b>XSS</b> · Razor auto HTML-encode<br/>
+      ✓ <b>Session timeout</b> 30 phút<br/>
+      ✓ <b>CSRF token</b> mặc định ASP.NET<br/>
+      ✓ Password hashing với salt
+    </div>
+  </div>
+
+  <!-- Usability card -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1240px; top:686px; width:560px; height:284px; background:white; border-radius:24px; z-index:1; box-shadow:0 24px 50px rgba(15,23,42,0.08); border:1px solid #E2E8F0;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1280px; top:714px; width:480px; z-index:10;">
+    <div style="font-size:13px; font-weight:700; color:#94A3B8; letter-spacing:2px;">USABILITY SCORE</div>
+    <div style="margin-top:10px; display:flex; align-items:baseline; gap:10px;">
+      <span style="font-family:'JetBrains Mono', monospace; font-size:88px; font-weight:800; color:#F59E0B; line-height:1;">4.5</span>
+      <span style="font-size:28px; color:#94A3B8; font-weight:700;">/ 5.0</span>
+    </div>
+    <div style="font-size:32px; color:#F59E0B; margin-top:6px; letter-spacing:4px;">★★★★★</div>
+    <div style="font-size:17px; color:#475569; margin-top:14px; line-height:1.5;">Đánh giá từ <b>3 giảng viên thử nghiệm thực tế</b> trên quy trình end-to-end.</div>
+  </div>
+
+  <!-- Footer -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:120px; top:1020px; width:1680px; z-index:10; display:flex; justify-content:space-between; align-items:center;">
+    <span style="font-size:16px; color:#94A3B8; letter-spacing:2px; font-weight:600;">SE104.Q23 — NHÓM 15</span>
+    <span style="font-family:'JetBrains Mono', monospace; font-size:16px; color:#94A3B8;">13 / 17</span>
+  </div>
+
+</div>
+</body>
+</html>
+

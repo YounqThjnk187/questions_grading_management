@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<title>05 — Công nghệ</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>body { margin:0; padding:0; overflow:hidden; font-family:'Be Vietnam Pro', system-ui, sans-serif; color:#0F172A; -webkit-font-smoothing:antialiased; }</style>
+</head>
+<body>
+<div class="slide-container" data-screen-label="05 Công nghệ" style="position:relative; width:1920px; height:1080px; overflow:hidden; background:#FAFBFF;">
+
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:-200px; top:400px; width:700px; height:700px; border-radius:50%; background:radial-gradient(circle at center, rgba(6,182,212,0.10), rgba(6,182,212,0) 60%); z-index:1;"></div>
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1500px; top:-200px; width:700px; height:700px; border-radius:50%; background:radial-gradient(circle at center, rgba(124,58,237,0.10), rgba(124,58,237,0) 60%); z-index:1;"></div>
+
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:120px; top:80px; width:400px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:18px; font-weight:600; color:#0891B2; letter-spacing:3px;">04 / CÔNG NGHỆ</div>
+  </div>
+
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:120px; top:120px; width:1680px; z-index:10;">
+    <div style="font-size:80px; font-weight:800; line-height:1.1; letter-spacing:-1.5px; color:#0F172A;">Kiến trúc <span style="background:linear-gradient(135deg, #06B6D4, #4F46E5); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;">3 lớp</span> &amp; Tech Stack</div>
+  </div>
+
+  <!-- LEFT: Architecture diagram -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:120px; top:280px; width:300px; z-index:10;">
+    <div style="font-size:14px; font-weight:700; letter-spacing:2.5px; color:#94A3B8; text-transform:uppercase;">Architecture · 3 Layers</div>
+  </div>
+
+  <!-- Presentation Layer -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:120px; top:330px; width:820px; height:130px; background:white; border-radius:18px; z-index:1; box-shadow:0 12px 30px rgba(15,23,42,0.06); border:2px solid #EEF2FF; border-left:8px solid #4F46E5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:160px; top:354px; width:760px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700; color:#4F46E5; letter-spacing:2px;">LAYER 01 · PRESENTATION</div>
+    <div style="font-size:28px; font-weight:700; color:#0F172A; margin-top:6px;">Razor Views + Bootstrap 3</div>
+    <div style="font-size:18px; color:#64748B; margin-top:6px;">UI rendering · validation client · responsive grid</div>
+  </div>
+
+  <!-- Arrow 1 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:514px; top:470px; width:32px; height:32px; background:linear-gradient(135deg, #4F46E5, #06B6D4); clip-path:polygon(50% 100%, 0 0, 100% 0); z-index:5;"></div>
+
+  <!-- Business Logic Layer -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:120px; top:520px; width:820px; height:130px; background:white; border-radius:18px; z-index:1; box-shadow:0 12px 30px rgba(15,23,42,0.06); border:2px solid #ECFEFF; border-left:8px solid #06B6D4;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:160px; top:544px; width:760px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700; color:#0891B2; letter-spacing:2px;">LAYER 02 · BUSINESS LOGIC</div>
+    <div style="font-size:28px; font-weight:700; color:#0F172A; margin-top:6px;">MVC Controllers + Services</div>
+    <div style="font-size:18px; color:#64748B; margin-top:6px;">Routing · business rules · validation server</div>
+  </div>
+
+  <!-- Arrow 2 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:514px; top:660px; width:32px; height:32px; background:linear-gradient(135deg, #06B6D4, #10B981); clip-path:polygon(50% 100%, 0 0, 100% 0); z-index:5;"></div>
+
+  <!-- Data Access Layer -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:120px; top:710px; width:820px; height:130px; background:white; border-radius:18px; z-index:1; box-shadow:0 12px 30px rgba(15,23,42,0.06); border:2px solid #F0FDF4; border-left:8px solid #10B981;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:160px; top:734px; width:760px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:14px; font-weight:700; color:#059669; letter-spacing:2px;">LAYER 03 · DATA ACCESS</div>
+    <div style="font-size:28px; font-weight:700; color:#0F172A; margin-top:6px;">Entity Framework 6 (ORM)</div>
+    <div style="font-size:18px; color:#64748B; margin-top:6px;">Code-first · LINQ · stored procedures</div>
+  </div>
+
+  <!-- Arrow 3 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:514px; top:850px; width:32px; height:32px; background:linear-gradient(135deg, #10B981, #475569); clip-path:polygon(50% 100%, 0 0, 100% 0); z-index:5;"></div>
+
+  <!-- Database -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:120px; top:900px; width:820px; height:90px; background:linear-gradient(135deg, #1E293B, #475569); border-radius:18px; z-index:1; box-shadow:0 12px 30px rgba(15,23,42,0.20);"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:160px; top:918px; width:760px; z-index:10; display:flex; align-items:center; gap:18px;">
+    <div style="width:54px; height:54px; background:rgba(255,255,255,0.15); border-radius:12px; display:flex; align-items:center; justify-content:center; color:white; font-size:26px; font-weight:800;">▤</div>
+    <div>
+      <div style="font-family:'JetBrains Mono', monospace; font-size:13px; font-weight:700; color:rgba(255,255,255,0.7); letter-spacing:2px;">DATABASE</div>
+      <div style="font-size:24px; font-weight:700; color:white; margin-top:2px;">SQL Server 2019 · 11 bảng · 4 stored procs</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Tech stack grid -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1000px; top:280px; width:300px; z-index:10;">
+    <div style="font-size:14px; font-weight:700; letter-spacing:2.5px; color:#94A3B8; text-transform:uppercase;">Tech Stack · 6 Libraries</div>
+  </div>
+
+  <!-- Tech card 1 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1000px; top:330px; width:380px; height:200px; background:white; border-radius:18px; z-index:1; box-shadow:0 12px 30px rgba(15,23,42,0.06); border:1px solid #E2E8F0;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1030px; top:354px; width:330px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:22px; font-weight:800; color:#4F46E5;">ASP.NET MVC 5</div>
+    <div style="font-size:16px; color:#64748B; margin-top:8px; line-height:1.4;">Framework chính, kiến trúc MVC chuẩn, routing rõ ràng, ổn định cho production.</div>
+    <div style="margin-top:14px; display:inline-block; padding:5px 12px; background:#EEF2FF; color:#4F46E5; border-radius:8px; font-size:13px; font-weight:700;">SERVER FRAMEWORK</div>
+  </div>
+
+  <!-- Tech card 2 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1400px; top:330px; width:400px; height:200px; background:white; border-radius:18px; z-index:1; box-shadow:0 12px 30px rgba(15,23,42,0.06); border:1px solid #E2E8F0;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1430px; top:354px; width:340px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:22px; font-weight:800; color:#0891B2;">C# 6.0</div>
+    <div style="font-size:16px; color:#64748B; margin-top:8px; line-height:1.4;">Ngôn ngữ chính cho controller, service, DAL. Strong typing, async/await.</div>
+    <div style="margin-top:14px; display:inline-block; padding:5px 12px; background:#ECFEFF; color:#0891B2; border-radius:8px; font-size:13px; font-weight:700;">LANGUAGE</div>
+  </div>
+
+  <!-- Tech card 3 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1000px; top:550px; width:380px; height:200px; background:white; border-radius:18px; z-index:1; box-shadow:0 12px 30px rgba(15,23,42,0.06); border:1px solid #E2E8F0;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1030px; top:574px; width:330px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:22px; font-weight:800; color:#059669;">Entity FW 6</div>
+    <div style="font-size:16px; color:#64748B; margin-top:8px; line-height:1.4;">ORM tự động sinh query, ngăn SQL injection, hỗ trợ code-first migration.</div>
+    <div style="margin-top:14px; display:inline-block; padding:5px 12px; background:#F0FDF4; color:#059669; border-radius:8px; font-size:13px; font-weight:700;">ORM</div>
+  </div>
+
+  <!-- Tech card 4 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1400px; top:550px; width:400px; height:200px; background:white; border-radius:18px; z-index:1; box-shadow:0 12px 30px rgba(15,23,42,0.06); border:1px solid #E2E8F0;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1430px; top:574px; width:340px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:22px; font-weight:800; color:#D97706;">Bootstrap 3</div>
+    <div style="font-size:16px; color:#64748B; margin-top:8px; line-height:1.4;">Grid system 12 cột, responsive component, form validation styling.</div>
+    <div style="margin-top:14px; display:inline-block; padding:5px 12px; background:#FFFBEB; color:#D97706; border-radius:8px; font-size:13px; font-weight:700;">UI FRAMEWORK</div>
+  </div>
+
+  <!-- Tech card 5 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1000px; top:770px; width:380px; height:200px; background:white; border-radius:18px; z-index:1; box-shadow:0 12px 30px rgba(15,23,42,0.06); border:1px solid #E2E8F0;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1030px; top:794px; width:330px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:22px; font-weight:800; color:#DB2777;">jQuery 1.10</div>
+    <div style="font-size:16px; color:#64748B; margin-top:8px; line-height:1.4;">DOM manipulation, AJAX calls, plugin Razor unobtrusive validation.</div>
+    <div style="margin-top:14px; display:inline-block; padding:5px 12px; background:#FDF2F8; color:#DB2777; border-radius:8px; font-size:13px; font-weight:700;">JS LIBRARY</div>
+  </div>
+
+  <!-- Tech card 6 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute; left:1400px; top:770px; width:400px; height:200px; background:white; border-radius:18px; z-index:1; box-shadow:0 12px 30px rgba(15,23,42,0.06); border:1px solid #E2E8F0;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:1430px; top:794px; width:340px; z-index:10;">
+    <div style="font-family:'JetBrains Mono', monospace; font-size:22px; font-weight:800; color:#7C3AED;">SQL Server</div>
+    <div style="font-size:16px; color:#64748B; margin-top:8px; line-height:1.4;">RDBMS bản 2019, hỗ trợ stored procs, indexing, transaction ACID.</div>
+    <div style="margin-top:14px; display:inline-block; padding:5px 12px; background:#F5F3FF; color:#7C3AED; border-radius:8px; font-size:13px; font-weight:700;">DATABASE</div>
+  </div>
+
+  <!-- Footer -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute; left:120px; top:1020px; width:1680px; z-index:10; display:flex; justify-content:space-between; align-items:center;">
+    <span style="font-size:16px; color:#94A3B8; letter-spacing:2px; font-weight:600;">SE104.Q23 — NHÓM 15</span>
+    <span style="font-family:'JetBrains Mono', monospace; font-size:16px; color:#94A3B8;">05 / 17</span>
+  </div>
+
+</div>
+</body>
+</html>
+
