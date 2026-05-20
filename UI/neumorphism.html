@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Section</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #e0e0e0;
+        }
+        .neumorphism {
+            background: #e0e0e0;
+            border-radius: 12px;
+            box-shadow: 10px 10px 30px #bebebe, -10px -10px 30px #ffffff;
+        }
+        .neumorphism-btn {
+            background: #e0e0e0;
+            border-radius: 12px;
+            box-shadow: 5px 5px 15px #bebebe, -5px -5px 15px #ffffff;
+            transition: all 0.2s ease-in-out;
+        }
+        .neumorphism-btn:hover {
+            box-shadow: inset 5px 5px 15px #bebebe, inset -5px -5px 15px #ffffff;
+        }
+    </style>
+</head>
+<body class="text-gray-900">
+    <section class="relative flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto p-8 neumorphism">
+        <!-- Text Section -->
+        <div class="md:w-1/2">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight text-gray-900">
+                Ghế Lento Lounge Nest
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 mb-6 leading-relaxed">
+                Với thiết kế cong mềm mại, ghế Lento Lounge mang lại sự hỗ trợ tối ưu và phong cách hiện đại, hoàn hảo cho mọi không gian sống.
+            </p>
+            <div class="flex space-x-4">
+                <a href="#" class="px-6 py-3 neumorphism-btn text-gray-900 font-medium">Thêm vào giỏ hàng</a>
+                <a href="#" class="px-6 py-3 neumorphism-btn text-gray-900 font-medium">Tìm hiểu thêm</a>
+            </div>
+        </div>
+
+        <!-- Image Section -->
+        <div class="relative md:w-1/2 flex items-center justify-center mt-8 md:mt-0">
+            <div class="relative">
+                <img src="https://robohash.org/lento-chair" alt="Ghế Lento" class="rounded-lg shadow-md">
+                <div class="absolute top-4 left-4 p-4 neumorphism">
+                    <p class="text-sm font-medium text-gray-600">Chất liệu</p>
+                    <p class="text-xl font-semibold text-gray-900">Vải nhung mềm</p>
+                </div>
+                <div class="absolute bottom-4 right-4 p-4 neumorphism">
+                    <p class="text-sm font-medium text-gray-600">Chân ghế</p>
+                    <p class="text-xl font-semibold text-gray-900">Gỗ sồi nguyên khối</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Section -->
+    <div class="mt-8 max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div class="p-4 neumorphism">
+            <p class="text-xl font-bold text-gray-900">2.5k+</p>
+            <p class="text-sm text-gray-600">Ghế đã bán</p>
+        </div>
+        <div class="p-4 neumorphism">
+            <p class="text-xl font-bold text-gray-900">98%</p>
+            <p class="text-sm text-gray-600">Khách hàng hài lòng</p>
+        </div>
+        <div class="p-4 neumorphism">
+            <p class="text-xl font-bold text-gray-900">1.2k</p>
+            <p class="text-sm text-gray-600">Đánh giá 5 sao</p>
+        </div>
+        <div class="p-4 neumorphism">
+            <p class="text-xl font-bold text-gray-900">10 năm</p>
+            <p class="text-sm text-gray-600">Bảo hành</p>
+        </div>
+    </div>
+</body>
+</html>

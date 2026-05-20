@@ -22,9 +22,10 @@ def get_db():
     """Lấy connection từ pool hoặc tạo mới"""
     if _db_pool:
         return _db_pool.pop()
-    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
+    conn = sqlite3.connect(DB_PATH, check_same_thread=False, timeout=10.0)
     conn.execute("PRAGMA journal_mode=WAL")  # Tăng tốc đọc
     conn.execute("PRAGMA synchronous=NORMAL")
+    conn.execute("PRAGMA busy_timeout=5000")  # Wait 5s if locked
     return conn
 
 def release_db(conn):
@@ -189,21 +190,37 @@ def label_class(diem_chu):
 SESSIONS = {}  # session_id -> {MaGV, HoTen}
 
 def get_sid(handler):
-    """Extract sid from URL query string (works without cookies)"""
+    """Extract sid from cookie first, then URL query string"""
+    # Check cookie first
+    cookie = handler.headers.get("Cookie","")
+    print(f"[get_sid] Cookie header: {cookie[:100] if cookie else 'EMPTY'}", flush=True)
+    for part in cookie.split(";"):
+        k,_,v = part.strip().partition("=")
+        if k.strip() == "sid":
+            print(f"[get_sid] Found sid in cookie: {v.strip()[:8]}...", flush=True)
+            return v.strip()
+    # Fallback to URL query string
     qs = urllib.parse.urlparse(handler.path).query
-    return urllib.parse.parse_qs(qs).get("sid", [""])[0]
+    sid_from_qs = urllib.parse.parse_qs(qs).get("sid", [""])[0]
+    if sid_from_qs:
+        print(f"[get_sid] Found sid in query string: {sid_from_qs[:8]}...", flush=True)
+    else:
+        print(f"[get_sid] NO SID FOUND!", flush=True)
+    return sid_from_qs
 
 def get_session(handler):
-    # Primary: check URL query string (works in VS Code Simple Browser)
-    sid = get_sid(handler)
-    if sid and sid in SESSIONS:
-        return SESSIONS[sid]
-    # Fallback: check cookie
+    # Primary: check cookie (standard web practice)
     cookie = handler.headers.get("Cookie","")
     for part in cookie.split(";"):
         k,_,v = part.strip().partition("=")
         if k.strip() == "sid":
-            return SESSIONS.get(v.strip())
+            sid = v.strip()
+            if sid and sid in SESSIONS:
+                return SESSIONS[sid]
+    # Fallback: check URL query string (for compatibility)
+    sid = get_sid(handler)
+    if sid and sid in SESSIONS:
+        return SESSIONS[sid]
     return None
 
 # ══════════════════════════════════════════════════════════════════════
@@ -613,7 +630,7 @@ document.addEventListener('DOMContentLoaded',function(){
 </script>
 """
 
-def layout(title, body, session, active="", sid=""):
+def layout(title, body, session, active=""):
     user = session["HoTen"] if session else ""
     nav_links = ""
     if session:
@@ -623,15 +640,14 @@ def layout(title, body, session, active="", sid=""):
             👤 {user} ▾
           </a>
           <ul class="dropdown-menu">
-            <li><a href="/logout?sid={sid}">🚪 Đăng xuất</a></li>
+            <li><a href="/logout">🚪 Đăng xuất</a></li>
           </ul>
         </li>"""
 
     if session:
         def li(href,icon,label,key):
             cls = "active" if active==key else ""
-            href_with_sid = f"{href}?sid={sid}" if "?" not in href else f"{href}&sid={sid}"
-            return f'<a href="{href_with_sid}" class="{cls}">{icon} {label}</a>'
+            return f'<a href="{href}" class="{cls}">{icon} {label}</a>'
         sidebar_html = f"""
         <div class="sidebar">
           <div class="hdr">Dashboard</div>
@@ -654,18 +670,23 @@ def layout(title, body, session, active="", sid=""):
     else:
         sidebar_html = f'<div class="main-content-full">{body}</div><footer>© 2026 Nhóm 15 – SE104.Q23</footer>'
 
-    sid_script = f'<script>window._SID="{sid}";</script>' if sid else ""
-    patch_script = """<script>
-document.addEventListener('DOMContentLoaded',function(){
-  var sid=window._SID||'';if(!sid)return;
-  document.querySelectorAll('form').forEach(function(f){
-    if(f.querySelector('input[name=sid]'))return;
-    var inp=document.createElement('input');inp.type='hidden';inp.name='sid';inp.value=sid;f.appendChild(inp);
-  });
-});
-</script>""" if sid else ""
     return f"""<!DOCTYPE html><html lang="vi">
-<head><title>{title} – Quản Lý Ra Đề & Chấm Thi</title>{STYLE}{sid_script}{patch_script}</head>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>{title} – Quản Lý Ra Đề & Chấm Thi</title>
+{STYLE}
+<script>
+// Force reload when navigating - bypass cache completely
+window.addEventListener('pageshow', function(event) {{
+  if (event.persisted) {{
+    window.location.reload(true);
+  }}
+}});
+</script>
+</head>
 <body>
 <nav class="navbar navbar-inverse" style="position:fixed;top:0;width:100%;z-index:1000;background:#222;min-height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;">
   <a class="navbar-brand" href="/" style="color:#fff;font-size:18px;font-weight:bold;text-decoration:none;">🎓 Quản Lý Ra Đề &amp; Chấm Thi</a>
@@ -685,10 +706,17 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):
         pass  # silence logs
 
+    def set_cookie(self, name, value, max_age=86400):
+        """Set a cookie - call before end_headers()"""
+        self.send_header("Set-Cookie", f"{name}={value}; Path=/; Max-Age={max_age}; HttpOnly")
+
     def send_html(self, html, code=200, headers=None):
         body = html.encode("utf-8")
         self.send_response(code)
         self.send_header("Content-Type","text/html; charset=utf-8")
+        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
         self.send_header("Content-Length", str(len(body)))
         if headers:
             for k,v in headers.items():
@@ -697,22 +725,13 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def redirect(self, loc, extra_headers=None):
-        sid = getattr(self, 'sid', '')
-        if sid and sid in SESSIONS:
-            sep = "&" if "?" in loc else "?"
-            loc = f"{loc}{sep}sid={sid}"
-        html = f"""<!DOCTYPE html><html><head><meta charset="utf-8">
-<script>window.location.href="{loc}";</script>
-</head><body></body></html>"""
-        self.send_response(200)
-        self.send_header("Content-Type","text/html; charset=utf-8")
+        # Use standard 302 redirect - cookie will carry session
+        self.send_response(302)
+        self.send_header("Location", loc)
         if extra_headers:
             for k,v in extra_headers.items():
                 self.send_header(k,v)
-        body = html.encode("utf-8")
-        self.send_header("Content-Length", str(len(body)))
         self.end_headers()
-        self.wfile.write(body)
 
     def parse_body(self):
         length = int(self.headers.get("Content-Length",0))
@@ -763,13 +782,17 @@ class Handler(BaseHTTPRequestHandler):
 </body></html>"""
 
     def page_home(self, session):
+        import time
+        sid_debug = self.sid if hasattr(self, 'sid') and self.sid else 'EMPTY!!!'
+        print(f"[page_home] self.sid = {sid_debug}", flush=True)
+        ts = int(time.time() * 1000)  # timestamp to bypass cache
         body = f"""
         <div class="page-header"><h2>🏠 Trang chủ</h2></div>
-        <div class="alert alert-info"><h4>👋 Xin chào, <strong>{session['HoTen']}</strong>!</h4>
+        <div class="alert alert-success"><h4>👋 Xin chào, <strong>{session['HoTen']}</strong>!</h4>
         Chào mừng đến với Hệ thống Quản lý Ra đề và Chấm thi.</div>
         <div class="row" style="margin-top:20px;">
           <div class="col-md-3">
-            <a href="/cauhoi" style="text-decoration:none;">
+            <a href="/cauhoi?_t={ts}" style="text-decoration:none;">
             <div class="thumbnail text-center" style="padding:20px;border:2px solid #3498db;">
               <div style="font-size:48px;">📋</div>
               <h4 style="color:#2c3e50;">Ngân hàng câu hỏi</h4>
@@ -777,7 +800,7 @@ class Handler(BaseHTTPRequestHandler):
             </div></a>
           </div>
           <div class="col-md-3">
-            <a href="/dethi/create" style="text-decoration:none;">
+            <a href="/dethi/create?_t={ts}" style="text-decoration:none;">
             <div class="thumbnail text-center" style="padding:20px;border:2px solid #27ae60;">
               <div style="font-size:48px;">➕</div>
               <h4 style="color:#2c3e50;">Soạn đề thi</h4>
@@ -785,7 +808,7 @@ class Handler(BaseHTTPRequestHandler):
             </div></a>
           </div>
           <div class="col-md-3">
-            <a href="/ketqua" style="text-decoration:none;">
+            <a href="/ketqua?_t={ts}" style="text-decoration:none;">
             <div class="thumbnail text-center" style="padding:20px;border:2px solid #e74c3c;">
               <div style="font-size:48px;">✏️</div>
               <h4 style="color:#2c3e50;">Nhập điểm</h4>
@@ -793,7 +816,7 @@ class Handler(BaseHTTPRequestHandler):
             </div></a>
           </div>
           <div class="col-md-3">
-            <a href="/baocao" style="text-decoration:none;">
+            <a href="/baocao?_t={ts}" style="text-decoration:none;">
             <div class="thumbnail text-center" style="padding:20px;border:2px solid #f39c12;">
               <div style="font-size:48px;">📊</div>
               <h4 style="color:#2c3e50;">Báo cáo năm</h4>
@@ -829,7 +852,7 @@ class Handler(BaseHTTPRequestHandler):
             </div>
           </div>
         </div>"""
-        return layout("Trang chủ", body, session, "home", self.sid)
+        return layout("Trang chủ", body, session, "home")
 
     def page_cauhoi(self, session, flash=""):
         conn = get_db()
@@ -884,8 +907,8 @@ class Handler(BaseHTTPRequestHandler):
               <td>{r[2]}</td>
               <td><span class="label label-{bclass}">{r[3]}</span></td>
               <td>
-                <a href="/cauhoi/edit/{r[0]}" class="btn btn-xs btn-warning">✏️ Sửa</a>
-                <a href="/cauhoi/delete/{r[0]}" class="btn btn-xs btn-danger"
+                <a href="/cauhoi/edit/{r[0]}?sid={self.sid}" class="btn btn-xs btn-warning">✏️ Sửa</a>
+                <a href="/cauhoi/delete/{r[0]}?sid={self.sid}" class="btn btn-xs btn-danger"
                    onclick="return confirm('Xóa câu hỏi này?')">🗑️ Xóa</a>
               </td>
             </tr>"""
@@ -914,20 +937,22 @@ class Handler(BaseHTTPRequestHandler):
         <div class="panel panel-default">
           <div class="panel-body">
             <form class="form-inline" method="get" style="margin-bottom:10px;">
+              <input type="hidden" name="sid" value="{self.sid}">
               <div class="form-group">
                 <input type="text" name="search" class="form-control" placeholder="🔍 Tìm kiếm nội dung câu hỏi..." 
                        value="{search_value}" style="width:300px;margin-right:10px;">
               </div>
               <button class="btn btn-primary">🔎 Tìm</button>
-              <a href="/cauhoi" class="btn btn-default">Xóa tìm kiếm</a>
+              <a href="/cauhoi?sid={self.sid}" class="btn btn-default">Xóa tìm kiếm</a>
             </form>
             <form class="form-inline" method="get">
+              <input type="hidden" name="sid" value="{self.sid}">
               <input type="hidden" name="search" value="{search_value}">
               <div class="form-group">Môn học: <select name="maMonFilter" class="form-control" style="margin:0 10px;">{mon_opts}</select></div>
               <div class="form-group">Độ khó: <select name="maDoKhoFilter" class="form-control" style="margin:0 10px;">{dk_opts}</select></div>
               <button class="btn btn-info">🔍 Lọc</button>
-              <a href="/cauhoi?search={search_value}" class="btn btn-default">Xóa lọc</a>
-              <a href="/cauhoi/create" class="btn btn-success pull-right">➕ Thêm câu hỏi</a>
+              <a href="/cauhoi?search={search_value}&sid={self.sid}" class="btn btn-default">Xóa lọc</a>
+              <a href="/cauhoi/create?sid={self.sid}" class="btn btn-success pull-right">➕ Thêm câu hỏi</a>
             </form>
           </div>
         </div>
@@ -937,7 +962,7 @@ class Handler(BaseHTTPRequestHandler):
           <tbody>{rows_html}</tbody>
         </table>
         <p class="text-muted">Tổng số: <strong>{len(rows)}</strong> câu hỏi</p>"""
-        return layout("Câu hỏi", body, session, "cauhoi", self.sid)
+        return layout("Câu hỏi", body, session, "cauhoi")
 
     def page_cauhoi_create(self, session, flash="", old=None):
         conn = get_db(); cur = conn.cursor()
@@ -952,7 +977,8 @@ class Handler(BaseHTTPRequestHandler):
         body = f"""
         <div class="page-header"><h2>➕ Thêm câu hỏi mới</h2></div>
         {flash}
-        <form method="post" action="/cauhoi/create">
+        <form method="post" action="/cauhoi/create?sid={self.sid}">
+          <input type="hidden" name="sid" value="{self.sid}">
           <div class="panel panel-default"><div class="panel-body">
             <div class="form-group">
               <label>Môn học <span class="text-danger">*</span></label>
@@ -967,10 +993,10 @@ class Handler(BaseHTTPRequestHandler):
               <textarea name="NoiDung" class="form-control" rows="4" placeholder="Nhập nội dung câu hỏi..." required>{old.get('nd','')}</textarea>
             </div>
             <button class="btn btn-primary">💾 Lưu câu hỏi</button>
-            <a href="/cauhoi" class="btn btn-default">← Quay lại</a>
+            <a href="/cauhoi?sid={self.sid}" class="btn btn-default">← Quay lại</a>
           </div></div>
         </form>"""
-        return layout("Thêm câu hỏi", body, session, "cauhoi", self.sid)
+        return layout("Thêm câu hỏi", body, session, "cauhoi")
 
     def page_cauhoi_edit(self, session, mach, flash=""):
         conn = get_db(); cur = conn.cursor()
@@ -986,7 +1012,8 @@ class Handler(BaseHTTPRequestHandler):
         body = f"""
         <div class="page-header"><h2>✏️ Sửa câu hỏi #{row[0]}</h2></div>
         {flash}
-        <form method="post" action="/cauhoi/edit/{row[0]}">
+        <form method="post" action="/cauhoi/edit/{row[0]}?sid={self.sid}">
+          <input type="hidden" name="sid" value="{self.sid}">
           <div class="panel panel-default"><div class="panel-body">
             <div class="form-group">
               <label>Môn học</label>
@@ -1001,10 +1028,10 @@ class Handler(BaseHTTPRequestHandler):
               <textarea name="NoiDung" class="form-control" rows="4">{row[1]}</textarea>
             </div>
             <button class="btn btn-primary">💾 Cập nhật</button>
-            <a href="/cauhoi" class="btn btn-default">← Quay lại</a>
+            <a href="/cauhoi?sid={self.sid}" class="btn btn-default">← Quay lại</a>
           </div></div>
         </form>"""
-        return layout("Sửa câu hỏi", body, session, "cauhoi", self.sid)
+        return layout("Sửa câu hỏi", body, session, "cauhoi")
 
     def page_dethi_list(self, session, flash=""):
         conn = get_db(); cur = conn.cursor()
@@ -1036,8 +1063,8 @@ class Handler(BaseHTTPRequestHandler):
               <td>{r[3]}</td><td>{r[4]} phút</td><td>{ngay}</td>
               <td>{status_badge}</td>
               <td>
-                <a href="/dethi/{r[0]}" class="btn btn-xs btn-info">👁 Xem</a>
-                <a href="/ketqua/nhap/{r[0]}" class="btn btn-xs btn-warning">✏️ Nhập điểm</a>
+                <a href="/dethi/{r[0]}?sid={self.sid}" class="btn btn-xs btn-info">👁 Xem</a>
+                <a href="/ketqua/nhap/{r[0]}?sid={self.sid}" class="btn btn-xs btn-warning">✏️ Nhập điểm</a>
               </td>
             </tr>"""
         if not rows_html:
@@ -1063,7 +1090,7 @@ class Handler(BaseHTTPRequestHandler):
           <tbody>{rows_html}</tbody>
         </table>
         <p class="text-muted">Tổng số: <strong>{len(rows)}</strong> đề thi</p>"""
-        return layout("Đề thi", body, session, "dethi", self.sid)
+        return layout("Đề thi", body, session, "dethi")
 
     def page_dethi_create(self, session, flash=""):
         conn = get_db(); cur = conn.cursor()
@@ -1077,7 +1104,8 @@ class Handler(BaseHTTPRequestHandler):
         body = f"""
         <div class="page-header"><h2>➕ Soạn đề thi mới</h2></div>
         {flash}
-        <form method="post" action="/dethi/create">
+        <form method="post" action="/dethi/create?sid={self.sid}">
+          <input type="hidden" name="sid" value="{self.sid}">
           <div class="row">
             <div class="col-md-5">
               <div class="panel panel-primary">
@@ -1122,7 +1150,7 @@ class Handler(BaseHTTPRequestHandler):
               </div>
               <div id="hidden_inputs"></div>
               <button type="submit" class="btn btn-primary btn-block btn-lg">💾 Lưu đề thi</button>
-              <a href="/dethi" class="btn btn-default btn-block" style="margin-top:5px;">← Hủy bỏ</a>
+              <a href="/dethi?sid={self.sid}" class="btn btn-default btn-block" style="margin-top:5px;">← Hủy bỏ</a>
             </div>
             <div class="col-md-7">
               <div class="panel panel-default">
@@ -1191,7 +1219,7 @@ class Handler(BaseHTTPRequestHandler):
           document.getElementById('hidden_inputs').innerHTML=hinputs;
         }}
         </script>"""
-        return layout("Soạn đề thi", body, session, "dethi_create", self.sid)
+        return layout("Soạn đề thi", body, session, "dethi_create")
 
     def page_dethi_detail(self, session, maDT):
         conn = get_db(); cur = conn.cursor()
@@ -1234,8 +1262,8 @@ class Handler(BaseHTTPRequestHandler):
                 </table>
               </div>
             </div>
-            <a href="/ketqua/nhap/{dt[0]}" class="btn btn-warning btn-block">✏️ Nhập điểm</a>
-            <a href="/dethi" class="btn btn-default btn-block" style="margin-top:5px;">← Danh sách</a>
+            <a href="/ketqua/nhap/{dt[0]}?sid={self.sid}" class="btn btn-warning btn-block">✏️ Nhập điểm</a>
+            <a href="/dethi?sid={self.sid}" class="btn btn-default btn-block" style="margin-top:5px;">← Danh sách</a>
           </div>
           <div class="col-md-8">
             <div class="panel panel-default">
@@ -1244,7 +1272,7 @@ class Handler(BaseHTTPRequestHandler):
             </div>
           </div>
         </div>"""
-        return layout("Chi tiết đề thi", body, session, "dethi", self.sid)
+        return layout("Chi tiết đề thi", body, session, "dethi")
 
     def page_dethi_tracuu(self, session):
         qs = urllib.parse.urlparse(self.path).query
@@ -1273,7 +1301,7 @@ class Handler(BaseHTTPRequestHandler):
               <td>DT-{r[0]:03d}</td><td>{r[1]}</td>
               <td><span class="badge">HK {r[2]}</span></td>
               <td>{r[3]}</td><td>{r[4]} phút</td><td>{ngay}</td>
-              <td><a href="/dethi/{r[0]}" class="btn btn-xs btn-info">👁 Chi tiết</a></td>
+              <td><a href="/dethi/{r[0]}?sid={self.sid}" class="btn btn-xs btn-info">👁 Chi tiết</a></td>
             </tr>"""
         if not rows_html:
             rows_html = "<tr><td colspan='7' class='text-center text-muted'><i>Không tìm thấy kết quả</i></td></tr>"
@@ -1284,6 +1312,7 @@ class Handler(BaseHTTPRequestHandler):
           <div class="panel-heading">Bộ lọc</div>
           <div class="panel-body">
             <form class="form-inline" method="get">
+              <input type="hidden" name="sid" value="{self.sid}">
               <div class="form-group">Môn: <input name="tenMon" class="form-control" value="{f_mon}" style="margin:0 8px;width:180px;"></div>
               <div class="form-group">HK: <select name="hocKy" class="form-control" style="margin:0 8px;">
                 <option value="">Tất cả</option>
@@ -1300,7 +1329,7 @@ class Handler(BaseHTTPRequestHandler):
           <thead><tr><th>Mã ĐT</th><th>Môn</th><th>HK</th><th>Năm học</th><th>Thời lượng</th><th>Ngày thi</th><th></th></tr></thead>
           <tbody>{rows_html}</tbody>
         </table>"""
-        return layout("Tra cứu", body, session, "tracuu", self.sid)
+        return layout("Tra cứu", body, session, "tracuu")
 
     def page_ketqua(self, session, flash=""):
         conn = get_db(); cur = conn.cursor()
@@ -1314,7 +1343,7 @@ class Handler(BaseHTTPRequestHandler):
               <td>DT-{r[0]:03d}</td><td>{r[1]}</td>
               <td><span class="badge">HK {r[2]}</span></td><td>{r[3]}</td>
               <td>{r[4] or '--'}</td>
-              <td><a href="/ketqua/nhap/{r[0]}" class="btn btn-sm btn-warning">✏️ Nhập điểm</a></td>
+              <td><a href="/ketqua/nhap/{r[0]}?sid={self.sid}" class="btn btn-sm btn-warning">✏️ Nhập điểm</a></td>
             </tr>"""
         if not rows_html:
             rows_html = "<tr><td colspan='6' class='text-center text-muted'><i>Chưa có đề thi nào</i></td></tr>"
@@ -1326,7 +1355,7 @@ class Handler(BaseHTTPRequestHandler):
           <thead><tr><th>Mã ĐT</th><th>Môn</th><th>HK</th><th>Năm học</th><th>Ngày thi</th><th></th></tr></thead>
           <tbody>{rows_html}</tbody>
         </table>"""
-        return layout("Nhập điểm", body, session, "ketqua", self.sid)
+        return layout("Nhập điểm", body, session, "ketqua")
 
     def page_nhap_diem(self, session, maDT, flash=""):
         conn = get_db(); cur = conn.cursor()
@@ -1370,13 +1399,14 @@ class Handler(BaseHTTPRequestHandler):
         </div>
         {flash}
         <p>Tổng: <strong>{len(svs)}</strong> SV | Đã chấm: <strong>{da_cham}</strong> | Chưa chấm: <strong>{len(svs)-da_cham}</strong></p>
-        <form method="post" action="/ketqua/luu/{maDT}">
+        <form method="post" action="/ketqua/luu/{maDT}?sid={self.sid}">
+          <input type="hidden" name="sid" value="{self.sid}">
           <table class="table table-bordered table-striped">
             <thead><tr><th>STT</th><th>Họ tên</th><th>Lớp</th><th>Điểm số</th><th>Điểm chữ</th><th>Ngày chấm</th><th>In</th></tr></thead>
             <tbody>{rows_html}</tbody>
           </table>
           <button class="btn btn-primary btn-lg">💾 Lưu tất cả điểm</button>
-          <a href="/ketqua" class="btn btn-default btn-lg">← Quay lại</a>
+          <a href="/ketqua?sid={self.sid}" class="btn btn-default btn-lg">← Quay lại</a>
         </form>
         <script>
         var bang=[
@@ -1396,7 +1426,7 @@ class Handler(BaseHTTPRequestHandler):
           for(var b of bang){{if(v>=b.tu&&v<=b.den){{sp.textContent=b.chu;sp.className='label '+b.cls;break;}}}}
         }}
         </script>"""
-        return layout("Nhập điểm", body, session, "ketqua", self.sid)
+        return layout("Nhập điểm", body, session, "ketqua")
 
     def page_baocao(self, session):
         qs = urllib.parse.urlparse(self.path).query
@@ -1520,6 +1550,7 @@ class Handler(BaseHTTPRequestHandler):
         body = f"""
         <div class="page-header"><h2>📊 Báo cáo tổng kết năm học</h2></div>
         <form method="get" class="form-inline" style="margin-bottom:15px;">
+          <input type="hidden" name="sid" value="{self.sid}">
           <label>Năm học: </label>
           <select name="namHoc" class="form-control" style="margin:0 10px;width:150px;">{nam_opts}</select>
           <button class="btn btn-primary">📊 Xem báo cáo</button>
@@ -1527,7 +1558,7 @@ class Handler(BaseHTTPRequestHandler):
         </form>
         {"<h3>Năm học: <strong>"+f_nam+"</strong></h3>" if f_nam else ""}
         {stats}{chart_html}{empty}{bao_html}"""
-        return layout("Báo cáo năm", body, session, "baocao", self.sid)
+        return layout("Báo cáo năm", body, session, "baocao")
 
     def page_thamso(self, session, flash=""):
         conn = get_db(); cur = conn.cursor()
@@ -1540,7 +1571,7 @@ class Handler(BaseHTTPRequestHandler):
               <td><strong>{r[0]}</strong></td>
               <td><span class="badge">{val}</span></td>
               <td class="text-muted">{r[2]}</td>
-              <td><a href="/thamso/edit/{r[0]}" class="btn btn-xs btn-warning">✏️ Sửa</a></td>
+              <td><a href="/thamso/edit/{r[0]}?sid={self.sid}" class="btn btn-xs btn-warning">✏️ Sửa</a></td>
             </tr>"""
         body = f"""
         <div class="page-header"><h2>⚙️ Tham số hệ thống</h2></div>
@@ -1550,7 +1581,7 @@ class Handler(BaseHTTPRequestHandler):
           <thead><tr><th>Tên tham số</th><th>Giá trị</th><th>Ghi chú</th><th></th></tr></thead>
           <tbody>{rows_html}</tbody>
         </table>"""
-        return layout("Tham số", body, session, "thamso", self.sid)
+        return layout("Tham số", body, session, "thamso")
 
     def page_thamso_edit(self, session, ten, flash=""):
         conn = get_db(); cur = conn.cursor()
@@ -1560,7 +1591,8 @@ class Handler(BaseHTTPRequestHandler):
         body = f"""
         <div class="page-header"><h2>✏️ Sửa tham số: {row[0]}</h2></div>
         {flash}
-        <form method="post" action="/thamso/edit/{row[0]}" style="max-width:450px;">
+        <form method="post" action="/thamso/edit/{row[0]}?sid={self.sid}" style="max-width:450px;">
+          <input type="hidden" name="sid" value="{self.sid}">
           <div class="panel panel-default"><div class="panel-body">
             <div class="form-group"><label>Tên:</label><p class="form-control-static"><strong>{row[0]}</strong></p></div>
             <div class="form-group"><label>Ghi chú:</label><p class="text-muted">{row[2]}</p></div>
@@ -1571,13 +1603,18 @@ class Handler(BaseHTTPRequestHandler):
             <a href="/thamso" class="btn btn-default">← Hủy</a>
           </div></div>
         </form>"""
-        return layout("Sửa tham số", body, session, "thamso", self.sid)
+        return layout("Sửa tham số", body, session, "thamso")
+
 
     # ── ROUTING ──────────────────────────────────────────────────────
     def do_GET(self):
+        print(f"\n{'='*60}\n[RAW GET] {self.path}\n{'='*60}", flush=True)
         path = urllib.parse.urlparse(self.path).path.rstrip("/") or "/"
         self.sid = get_sid(self)
         session = get_session(self)
+        
+        # Debug logging
+        print(f"[GET] {path} | sid={self.sid[:8] if self.sid else 'None'} | session={'OK' if session else 'NO'}", flush=True)
 
         def need_login():
             self.redirect("/login"); return None
@@ -1587,10 +1624,11 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/logout":
             if self.sid: SESSIONS.pop(self.sid, None)
             self.sid = ""
-            html = """<!DOCTYPE html><html><head><meta charset="utf-8">
-<script>window.location.href="/login";</script>
-</head><body></body></html>"""
-            self.send_html(html)
+            # Clear cookie and redirect to login
+            self.send_response(302)
+            self.set_cookie("sid", "", max_age=0)  # Delete cookie
+            self.send_header("Location", "/login")
+            self.end_headers()
             return
 
         if not session: 
@@ -1762,10 +1800,25 @@ h1{{text-align:center;color:#2c3e50;border-bottom:3px solid #3498db;padding-bott
             self.send_header("Content-Type","application/json; charset=utf-8")
             self.send_header("Content-Length",str(len(body)))
             self.end_headers(); self.wfile.write(body); return
+        
+        if path == "/test":
+            # Test page để debug links
+            html = """<!DOCTYPE html><html><head><meta charset="utf-8"><title>Test</title></head>
+<body><h1>Test Links</h1>
+<p><a href="/cauhoi?sid=test123">Test Link 1: /cauhoi?sid=test123</a></p>
+<p><a href="/dethi/create?sid=test123">Test Link 2: /dethi/create?sid=test123</a></p>
+<p><button onclick="location.href='/ketqua?sid=test123'">Test Button: JS redirect</button></p>
+<p>Current SID: <span id="sid"></span></p>
+<script>
+var qs = new URLSearchParams(window.location.search);
+document.getElementById('sid').textContent = qs.get('sid') || 'NONE';
+</script></body></html>"""
+            return self.send_html(html)
 
         self.send_html("<h1>404 Not Found</h1>", 404)
 
     def do_POST(self):
+        print(f"\n{'='*60}\n[RAW POST] {self.path}\n{'='*60}", flush=True)
         path = urllib.parse.urlparse(self.path).path.rstrip("/")
         self.sid = get_sid(self)
         session = get_session(self)
@@ -1775,6 +1828,9 @@ h1{{text-align:center;color:#2c3e50;border-bottom:3px solid #3498db;padding-bott
             self.sid = self.pv(form, "sid")
             if self.sid and self.sid in SESSIONS:
                 session = SESSIONS[self.sid]
+        
+        # Debug logging
+        print(f"[POST] {path} | sid={self.sid[:8] if self.sid else 'None'} | session={'OK' if session else 'NO'}", flush=True)
 
         if path == "/login":
             username = self.pv(form, "username")
@@ -1789,9 +1845,19 @@ h1{{text-align:center;color:#2c3e50;border-bottom:3px solid #3498db;padding-bott
             sid = secrets.token_hex(16)
             SESSIONS[sid] = {"MaGV": row[0], "HoTen": row[1]}
             self.sid = sid
-            # Redirect với sid trong URL (không cần cookie – tương thích VS Code Simple Browser)
-            self.redirect("/")
-            return
+            print(f"[LOGIN SUCCESS] Created session {sid[:8]}... for user {row[1]}", flush=True)
+            # Set cookie via JavaScript and redirect
+            html = f"""<!DOCTYPE html><html><head><meta charset="utf-8">
+<script>
+document.cookie = "sid={sid}; path=/; max-age=86400";
+console.log("Cookie set:", document.cookie);
+setTimeout(function(){{ window.location.href = "/"; }}, 100);
+</script>
+</head><body>
+<p>Đăng nhập thành công! Đang chuyển hướng...</p>
+</body></html>"""
+            print(f"[LOGIN SUCCESS] Sending HTML with JS cookie set for sid={sid[:8]}...", flush=True)
+            return self.send_html(html)
 
         if not session:
             self.redirect("/login"); return

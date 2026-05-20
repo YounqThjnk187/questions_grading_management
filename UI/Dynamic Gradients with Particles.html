@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Section</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(120deg, #89f7fe, #66a6ff);
+            overflow: hidden;
+            position: relative;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #ff9a9e, #fad0c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: move 10s infinite ease-in-out;
+        }
+        @keyframes move {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            50% {
+                transform: translateY(-20px) translateX(10px);
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-900">
+    <div class="particle" style="width: 50px; height: 50px; top: 20%; left: 10%;"></div>
+    <div class="particle" style="width: 80px; height: 80px; top: 40%; left: 70%;"></div>
+    <div class="particle" style="width: 30px; height: 30px; top: 60%; left: 50%;"></div>
+
+    <section class="relative flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto p-8">
+        <!-- Text Section -->
+        <div class="md:w-1/2">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight gradient-text">
+                Ghế Lento Lounge Nest
+            </h1>
+            <p class="text-lg md:text-xl text-gray-100 mb-6 leading-relaxed">
+                Với thiết kế cong mềm mại, ghế Lento Lounge mang lại sự hỗ trợ tối ưu và phong cách hiện đại, hoàn hảo cho mọi không gian sống.
+            </p>
+            <div class="flex space-x-4">
+                <a href="#" class="px-6 py-3 bg-gray-900 text-white font-medium rounded-lg shadow hover:bg-gray-800 transition">Thêm vào giỏ hàng</a>
+                <a href="#" class="px-6 py-3 bg-gray-100 text-gray-900 font-medium rounded-lg shadow hover:bg-gray-200 transition">Tìm hiểu thêm</a>
+            </div>
+        </div>
+
+        <!-- Image Section -->
+        <div class="relative md:w-1/2 flex items-center justify-center mt-8 md:mt-0">
+            <div class="relative p-4">
+                <img src="https://robohash.org/lento-chair" alt="Ghế Lento" class="rounded-lg shadow-md">
+                <div class="absolute top-4 left-4 p-4" style="background: rgba(255, 255, 255, 0.2); border-radius: 12px;">
+                    <p class="text-sm font-medium text-gray-100">Chất liệu</p>
+                    <p class="text-xl font-semibold text-gray-100">Vải nhung mềm</p>
+                </div>
+                <div class="absolute bottom-4 right-4 p-4" style="background: rgba(255, 255, 255, 0.2); border-radius: 12px;">
+                    <p class="text-sm font-medium text-gray-100">Chân ghế</p>
+                    <p class="text-xl font-semibold text-gray-100">Gỗ sồi nguyên khối</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Section -->
+    <div class="mt-8 max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div class="p-4" style="background: rgba(255, 255, 255, 0.2); border-radius: 12px;">
+            <p class="text-xl font-bold text-gray-100">2.5k+</p>
+            <p class="text-sm text-gray-100">Ghế đã bán</p>
+        </div>
+        <div class="p-4" style="background: rgba(255, 255, 255, 0.2); border-radius: 12px;">
+            <p class="text-xl font-bold text-gray-100">98%</p>
+            <p class="text-sm text-gray-100">Khách hàng hài lòng</p>
+        </div>
+        <div class="p-4" style="background: rgba(255, 255, 255, 0.2); border-radius: 12px;">
+            <p class="text-xl font-bold text-gray-100">1.2k</p>
+            <p class="text-sm text-gray-100">Đánh giá 5 sao</p>
+        </div>
+        <div class="p-4" style="background: rgba(255, 255, 255, 0.2); border-radius: 12px;">
+            <p class="text-xl font-bold text-gray-100">10 năm</p>
+            <p class="text-sm text-gray-100">Bảo hành</p>
+        </div>
+    </div>
+</body>
+</html>
