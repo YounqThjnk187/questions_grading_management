@@ -13,8 +13,8 @@
 
 Hệ thống gồm 2 phiên bản:
 
-💻 ASP.NET MVC (bản chính)
-🐍 Python Demo (chạy nhanh, không cần Visual Studio)
+- 💻 ASP.NET MVC (bản chính)
+- 🐍 Python Demo (chạy nhanh, không cần Visual Studio)
 
 ## Cách chạy nhanh (Python demo)
 
@@ -28,34 +28,35 @@ Truy cập: http://localhost8080
 
 ## Chức năng chính
 1. Ngân hàng câu hỏi
-Thêm / sửa / xóa câu hỏi
-Phân loại theo môn học và độ khó
-Tìm kiếm và lọc câu hỏi
+- Thêm / sửa / xóa câu hỏi
+- Phân loại theo môn học và độ khó
+- Tìm kiếm và lọc câu hỏi
 
 2. Soạn đề thi
-Chọn câu hỏi từ ngân hàng
-Giới hạn số lượng theo quy định
-Thiết lập thời gian thi
+- Chọn câu hỏi từ ngân hàng
+- Giới hạn số lượng theo quy định
+- Thiết lập thời gian thi
 
 3. Nhập điểm
-Nhập điểm 0–10
-Tự động quy đổi điểm chữ (A, B+, B,...)
-Lưu lịch sử chấm điểm
+- Nhập điểm 0–10
+- Tự động quy đổi điểm chữ (A, B+, B,...)
+- Lưu lịch sử chấm điểm
 
 4. Tra cứu đề thi
-Tìm theo môn học / học kỳ / năm học
-Xem chi tiết đề thi
+- Tìm theo môn học / học kỳ / năm học
+- Xem chi tiết đề thi
 
 5. Báo cáo thống kê
-Phân loại điểm theo mức
-Tính điểm trung bình
-Xuất báo cáo CSV
+- Phân loại điểm theo mức
+- Tính điểm trung bình
+- Xuất báo cáo CSV
 
 6. Quản lý hệ thống
-Quy định số câu hỏi / thời gian thi
-Quản lý lớp, sinh viên, môn học
+- Quy định số câu hỏi / thời gian thi
+- Quản lý lớp, sinh viên, môn học
 
 ## Công nghệ sử dụng 
+
 Backend chính
 - ASP.NET MVC 5 (C#)
 - Entity Framework 6
@@ -69,6 +70,7 @@ Demo nhanh
 
 ## Cấu trúc hệ thống
 
+```powershell
 QuanLyRaDeChamThi/
 ├── Controllers/   (CauHoi, DeThi, KetQua,...)
 ├── Models/        (Entity Framework)
@@ -76,22 +78,23 @@ QuanLyRaDeChamThi/
 ├── Database/      (SQL script)
 ├── demo_app.py    (Python demo)
 └── README.md
+```
 
 ## Cơ sở dữ liệu
 
 Hệ thống gồm 11 bảng chính:
 
-GIANG_VIEN
-MON_HOC
-DO_KHO
-CAU_HOI
-DE_THI
-CT_DETHI
-LOP_HOC
-SINH_VIEN
-KET_QUA
-BANG_DIEM_CHU
-THAM_SO
+- GIANG_VIEN
+- MON_HOC
+- DO_KHO
+- CAU_HOI
+- DE_THI
+- CT_DETHI
+- LOP_HOC
+- SINH_VIEN
+- KET_QUA
+- BANG_DIEM_CHU
+- THAM_SO
 
 ## Điểm nổi bật
 ✔ CRUD đầy đủ (câu hỏi, đề thi, điểm)
@@ -101,17 +104,18 @@ THAM_SO
 ✔ Có bản demo Python chạy ngay
 ✔ Tách module rõ ràng theo MVC
 
-## Nhóm thực hiện
-Nhóm 15 – SE104.Q23
-Trường Đại học Công nghệ Thông tin – ĐHQG TP.HCM
-
 ## Tài khoản mẫu
+
+```powershell
 Username	Password
 gv01	123456
 gv02	123456
 gv03	123456
+```
 
 ## Bảng điểm chữ
+
+```powershell
 Điểm	Chữ
 8.5–10	A
 8.0–8.4	B+
@@ -121,6 +125,7 @@ gv03	123456
 5.0–5.4	D+
 4.0–4.9	D
 <4.0	F
+```
 
 ## Kết luận
 
