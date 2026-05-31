@@ -14,6 +14,7 @@ namespace QuanLyRaDeChamThi.Models.ViewModels
         public string TenMon { get; set; }
         public int HocKy { get; set; }
         public int TongSinhVien { get; set; }
+
         public int SoA { get; set; }
         public int SoBPlus { get; set; }
         public int SoB { get; set; }
@@ -22,11 +23,12 @@ namespace QuanLyRaDeChamThi.Models.ViewModels
         public int SoDPlus { get; set; }
         public int SoD { get; set; }
         public int SoF { get; set; }
+
         public decimal DiemTrungBinh { get; set; }
 
-        // Tỉ lệ đỗ (D trở lên)
         public decimal TiLeDao => TongSinhVien > 0
             ? (decimal)(TongSinhVien - SoF) / TongSinhVien * 100
             : 0;
+        public List<string> DanhSachNamHoc { get; set; } = new List<string>();
     }
 }

@@ -8,83 +8,125 @@
     <h2><i class="glyphicon glyphicon-list-alt"></i> Ngân hàng câu hỏi</h2>
 </div>
 
-<!-- Bộ lọc -->
+<!-- FILTER -->
 @using (Html.BeginForm("Index", "CauHoi", FormMethod.Get, new { @class = "form-inline", style = "margin-bottom:15px;" }))
 {
     <div class="panel panel-default">
         <div class="panel-body">
+
             <div class="form-group">
-                <label>Môn học: </label>
-                <select name="maMonFilter" class="form-control" style="margin: 0 10px;">
+                <label>Môn học:</label>
+                <select name="maMonFilter" class="form-control" style="margin:0 10px;">
                     <option value="">-- Tất cả --</option>
                     @foreach (var mon in (List<QuanLyRaDeChamThi.Models.MonHocModel>)ViewBag.DanhSachMon)
                     {
-                        <option value="@mon.MaMon" @(ViewBag.MaMonFilter != null && (int)ViewBag.MaMonFilter == mon.MaMon ? "selected" : "")>@mon.TenMon</option>
+                        <option value="@mon.MaMon"
+                                @(ViewBag.MaMonFilter != null && (int)ViewBag.MaMonFilter == mon.MaMon ? "selected" : "")>
+                            @mon.TenMon
+                        </option>
                     }
                 </select>
             </div>
+
             <div class="form-group">
-                <label>Độ khó: </label>
-                <select name="maDoKhoFilter" class="form-control" style="margin: 0 10px;">
+                <label>Độ khó:</label>
+                <select name="maDoKhoFilter" class="form-control" style="margin:0 10px;">
                     <option value="">-- Tất cả --</option>
                     @foreach (var dk in (List<QuanLyRaDeChamThi.Models.DoKhoModel>)ViewBag.DanhSachDoKho)
                     {
-                        <option value="@dk.MaDoKho" @(ViewBag.MaDoKhoFilter != null && (int)ViewBag.MaDoKhoFilter == dk.MaDoKho ? "selected" : "")>@dk.TenDoKho</option>
+                        <option value="@dk.MaDoKho"
+                                @(ViewBag.MaDoKhoFilter != null && (int)ViewBag.MaDoKhoFilter == dk.MaDoKho ? "selected" : "")>
+                            @dk.TenDoKho
+                        </option>
                     }
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-filter"></i> Lọc</button>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="glyphicon glyphicon-filter"></i> Lọc
+            </button>
+
             <a href="@Url.Action("Index")" class="btn btn-default">Xóa lọc</a>
-            <a href="@Url.Action("Create")" class="btn btn-success pull-right"><i class="glyphicon glyphicon-plus"></i> Thêm câu hỏi</a>
+
+            <a href="@Url.Action("Create")" class="btn btn-success pull-right">
+                <i class="glyphicon glyphicon-plus"></i> Thêm câu hỏi
+            </a>
+
         </div>
     </div>
 }
 
+<!-- TABLE -->
 <table class="table table-bordered table-striped table-hover">
     <thead>
         <tr>
-            <th style="width:60px;">Mã CH</th>
-            <th>Nội dung câu hỏi</th>
-            <th style="width:150px;">Môn học</th>
+            <th style="width:60px;">Mã</th>
+            <th>Nội dung</th>
+            <th style="width:180px;">Môn học</th>
             <th style="width:120px;">Độ khó</th>
-            <th style="width:130px;">Thao tác</th>
+            <th style="width:140px;">Thao tác</th>
         </tr>
     </thead>
+
     <tbody>
         @if (!Model.Any())
         {
-            <tr><td colspan="5" class="text-center text-muted"><i>Chưa có câu hỏi nào. Hãy thêm câu hỏi mới!</i></td></tr>
-        }
-        @foreach (var item in Model)
-        {
             <tr>
-                <td>@item.MaCH</td>
-                <td>
-                    @if (item.NoiDung.Length > 100)
-                    {
-                        @item.NoiDung.Substring(0, 100)<text>...</text>
-                    }
-                    else { @item.NoiDung }
-                </td>
-                <td>@item.MonHoc?.TenMon</td>
-                <td>
-                    @{
-                        var badgeClass = item.MaDoKho == 1 ? "success" : item.MaDoKho == 2 ? "info" : item.MaDoKho == 3 ? "warning" : "danger";
-                    }
-                    <span class="label label-@badgeClass">@item.DoKho?.TenDoKho</span>
-                </td>
-                <td>
-                    <a href="@Url.Action("Edit", new { id = item.MaCH })" class="btn btn-xs btn-warning">
-                        <i class="glyphicon glyphicon-pencil"></i> Sửa
-                    </a>
-                    <a href="@Url.Action("Delete", new { id = item.MaCH })" class="btn btn-xs btn-danger"
-                       onclick="return confirm('Bạn có chắc muốn xóa câu hỏi này?')">
-                        <i class="glyphicon glyphicon-trash"></i> Xóa
-                    </a>
+                <td colspan="5" class="text-center text-muted">
+                    Chưa có câu hỏi nào
                 </td>
             </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MaCH</td>
+
+                    <td>
+                        @(item.NoiDung != null && item.NoiDung.Length > 100
+                            ? item.NoiDung.Substring(0, 100) + "..."
+                            : item.NoiDung)
+                    </td>
+
+                    <!-- FIX CHÍNH Ở ĐÂY -->
+                    <td>
+                        @(item.MonHoc != null ? item.MonHoc.TenMon : "")
+                    </td>
+
+                    <td>
+                        @{
+                            string badgeClass =
+                                item.MaDoKho == 1 ? "success" :
+                                item.MaDoKho == 2 ? "info" :
+                                item.MaDoKho == 3 ? "warning" :
+                                "danger";
+                        }
+
+                        <span class="label label-@badgeClass">
+                            @(item.DoKho != null ? item.DoKho.TenDoKho : "")
+                        </span>
+                    </td>
+
+                    <td>
+                        <a href="@Url.Action("Edit", new { id = item.MaCH })"
+                           class="btn btn-xs btn-warning">
+                            Sửa
+                        </a>
+
+                        <a href="@Url.Action("Delete", new { id = item.MaCH })"
+                           class="btn btn-xs btn-danger"
+                           onclick="return confirm('Xóa câu hỏi này?')">
+                            Xóa
+                        </a>
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>
 
-<p class="text-muted">Tổng số: <strong>@Model.Count()</strong> câu hỏi</p>
+<p class="text-muted">
+    Tổng số: <strong>@Model.Count()</strong> câu hỏi
+</p>

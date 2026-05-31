@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Web.Mvc;
+using System.Data.Entity;
 using QuanLyRaDeChamThi.Models;
 
 namespace QuanLyRaDeChamThi.Controllers
@@ -20,122 +21,204 @@ namespace QuanLyRaDeChamThi.Controllers
             return null;
         }
 
-        // GET: CauHoi - danh sách câu hỏi của giảng viên hiện tại
+        // GET: CauHoi
         public ActionResult Index(int? maMonFilter, int? maDoKhoFilter)
         {
-            var check = CheckLogin(); if (check != null) return check;
+            var check = CheckLogin();
+            if (check != null) return check;
+
             int maGV = GetMaGV();
 
+            // ✅ FIX QUAN TRỌNG: Include bằng LINQ chuẩn
             var query = db.CauHois
-                .Include("MonHoc")
-                .Include("DoKho")
+                .Include(c => c.MonHoc)
+                .Include(c => c.DoKho)
                 .Where(c => c.MonHoc.MaGV == maGV);
 
+            // filter
             if (maMonFilter.HasValue)
                 query = query.Where(c => c.MaMon == maMonFilter.Value);
+
             if (maDoKhoFilter.HasValue)
                 query = query.Where(c => c.MaDoKho == maDoKhoFilter.Value);
 
-            ViewBag.DanhSachMon   = db.MonHocs.Where(m => m.MaGV == maGV).ToList();
+            // dropdown data
+            ViewBag.DanhSachMon = db.MonHocs
+                .Where(m => m.MaGV == maGV)
+                .ToList();
+
             ViewBag.DanhSachDoKho = db.DoKhos.ToList();
-            ViewBag.MaMonFilter   = maMonFilter;
+
+            ViewBag.MaMonFilter = maMonFilter;
             ViewBag.MaDoKhoFilter = maDoKhoFilter;
 
-            return View(query.ToList());
+            // ⚠️ FIX QUAN TRỌNG: materialize sau include
+            var result = query.ToList();
+
+            return View(result);
         }
 
-        // GET: CauHoi/Create
+        // GET: Create
         public ActionResult Create()
         {
-            var check = CheckLogin(); if (check != null) return check;
+            var check = CheckLogin();
+            if (check != null) return check;
+
             int maGV = GetMaGV();
-            ViewBag.DanhSachMon   = new SelectList(db.MonHocs.Where(m => m.MaGV == maGV), "MaMon", "TenMon");
-            ViewBag.DanhSachDoKho = new SelectList(db.DoKhos, "MaDoKho", "TenDoKho");
+
+            ViewBag.DanhSachMon = new SelectList(
+                db.MonHocs.Where(m => m.MaGV == maGV),
+                "MaMon",
+                "TenMon"
+            );
+
+            ViewBag.DanhSachDoKho = new SelectList(
+                db.DoKhos,
+                "MaDoKho",
+                "TenDoKho"
+            );
+
             return View(new CauHoiModel());
         }
 
-        // POST: CauHoi/Create
+        // POST: Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(CauHoiModel model)
         {
-            var check = CheckLogin(); if (check != null) return check;
-            int maGV = GetMaGV();
+            var check = CheckLogin();
+            if (check != null) return check;
 
             if (ModelState.IsValid)
             {
                 db.CauHois.Add(model);
                 db.SaveChanges();
-                TempData["Success"] = "Câu hỏi đã được thêm thành công!";
+
+                TempData["Success"] = "Thêm câu hỏi thành công!";
                 return RedirectToAction("Index");
             }
 
-            ViewBag.DanhSachMon   = new SelectList(db.MonHocs.Where(m => m.MaGV == maGV), "MaMon", "TenMon", model.MaMon);
-            ViewBag.DanhSachDoKho = new SelectList(db.DoKhos, "MaDoKho", "TenDoKho", model.MaDoKho);
+            int maGV = GetMaGV();
+
+            ViewBag.DanhSachMon = new SelectList(
+                db.MonHocs.Where(m => m.MaGV == maGV),
+                "MaMon",
+                "TenMon",
+                model.MaMon
+            );
+
+            ViewBag.DanhSachDoKho = new SelectList(
+                db.DoKhos,
+                "MaDoKho",
+                "TenDoKho",
+                model.MaDoKho
+            );
+
             return View(model);
         }
 
-        // GET: CauHoi/Edit/5
+        // GET: Edit
         public ActionResult Edit(int id)
         {
-            var check = CheckLogin(); if (check != null) return check;
+            var check = CheckLogin();
+            if (check != null) return check;
+
             int maGV = GetMaGV();
 
-            var cauHoi = db.CauHois.Include("MonHoc").FirstOrDefault(c => c.MaCH == id && c.MonHoc.MaGV == maGV);
+            var cauHoi = db.CauHois
+                .Include(c => c.MonHoc)
+                .Include(c => c.DoKho)
+                .FirstOrDefault(c => c.MaCH == id && c.MonHoc.MaGV == maGV);
+
             if (cauHoi == null) return HttpNotFound();
 
-            ViewBag.DanhSachMon   = new SelectList(db.MonHocs.Where(m => m.MaGV == maGV), "MaMon", "TenMon", cauHoi.MaMon);
-            ViewBag.DanhSachDoKho = new SelectList(db.DoKhos, "MaDoKho", "TenDoKho", cauHoi.MaDoKho);
+            ViewBag.DanhSachMon = new SelectList(
+                db.MonHocs.Where(m => m.MaGV == maGV),
+                "MaMon",
+                "TenMon",
+                cauHoi.MaMon
+            );
+
+            ViewBag.DanhSachDoKho = new SelectList(
+                db.DoKhos,
+                "MaDoKho",
+                "TenDoKho",
+                cauHoi.MaDoKho
+            );
+
             return View(cauHoi);
         }
 
-        // POST: CauHoi/Edit/5
+        // POST: Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(CauHoiModel model)
         {
-            var check = CheckLogin(); if (check != null) return check;
-            int maGV = GetMaGV();
+            var check = CheckLogin();
+            if (check != null) return check;
 
             if (ModelState.IsValid)
             {
                 db.Entry(model).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                TempData["Success"] = "Câu hỏi đã được cập nhật!";
+
+                TempData["Success"] = "Cập nhật thành công!";
                 return RedirectToAction("Index");
             }
 
-            ViewBag.DanhSachMon   = new SelectList(db.MonHocs.Where(m => m.MaGV == maGV), "MaMon", "TenMon", model.MaMon);
-            ViewBag.DanhSachDoKho = new SelectList(db.DoKhos, "MaDoKho", "TenDoKho", model.MaDoKho);
+            int maGV = GetMaGV();
+
+            ViewBag.DanhSachMon = new SelectList(
+                db.MonHocs.Where(m => m.MaGV == maGV),
+                "MaMon",
+                "TenMon",
+                model.MaMon
+            );
+
+            ViewBag.DanhSachDoKho = new SelectList(
+                db.DoKhos,
+                "MaDoKho",
+                "TenDoKho",
+                model.MaDoKho
+            );
+
             return View(model);
         }
 
-        // GET: CauHoi/Delete/5
+        // GET: Delete
         public ActionResult Delete(int id)
         {
-            var check = CheckLogin(); if (check != null) return check;
+            var check = CheckLogin();
+            if (check != null) return check;
+
             int maGV = GetMaGV();
 
-            var cauHoi = db.CauHois.Include("MonHoc").Include("DoKho")
+            var cauHoi = db.CauHois
+                .Include(c => c.MonHoc)
+                .Include(c => c.DoKho)
                 .FirstOrDefault(c => c.MaCH == id && c.MonHoc.MaGV == maGV);
+
             if (cauHoi == null) return HttpNotFound();
+
             return View(cauHoi);
         }
 
-        // POST: CauHoi/Delete/5
+        // POST: Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var check = CheckLogin(); if (check != null) return check;
+            var check = CheckLogin();
+            if (check != null) return check;
 
             var cauHoi = db.CauHois.Find(id);
+
             if (cauHoi != null)
             {
                 db.CauHois.Remove(cauHoi);
                 db.SaveChanges();
-                TempData["Success"] = "Câu hỏi đã được xóa!";
             }
+
             return RedirectToAction("Index");
         }
 

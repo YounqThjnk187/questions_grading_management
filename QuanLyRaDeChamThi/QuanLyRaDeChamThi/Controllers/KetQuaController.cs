@@ -1,9 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
 using QuanLyRaDeChamThi.Models;
 using QuanLyRaDeChamThi.Models.ViewModels;
+using System;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace QuanLyRaDeChamThi.Controllers
 {
@@ -20,128 +19,152 @@ namespace QuanLyRaDeChamThi.Controllers
             return null;
         }
 
-        // GET: KetQua - Chọn đề thi để nhập điểm
+        // GET: KetQua
         public ActionResult Index()
         {
-            var check = CheckLogin(); if (check != null) return check;
+            var check = CheckLogin();
+            if (check != null) return check;
+
             int maGV = GetMaGV();
 
-            var deThis = db.DeThis.Include("MonHoc")
+            // FIX: không trả entity trực tiếp nữa
+            var deThis = db.DeThis
                 .Where(d => d.MaGV == maGV)
-                .OrderByDescending(d => d.MaDT)
+                .Select(d => new DeThiNhapDiemItem
+                {
+                    MaDT = d.MaDT,
+                    HocKy = d.HocKy,
+                    NamHoc = d.NamHoc,
+                    NgayThi = d.NgayThi,
+                    TenMon = d.MonHoc.TenMon
+                })
                 .ToList();
 
             return View(deThis);
         }
 
-        // GET: KetQua/NhapDiem/5 - Nhập điểm cho đề thi
+        // GET: Nhập điểm
         public ActionResult NhapDiem(int maDT, int? maLop)
         {
-            var check = CheckLogin(); if (check != null) return check;
+            var check = CheckLogin();
+            if (check != null) return check;
+
             int maGV = GetMaGV();
 
-            var deThi = db.DeThis.Include("MonHoc")
-                .FirstOrDefault(d => d.MaDT == maDT && d.MaGV == maGV);
+            var deThi = db.DeThis
+                .Where(d => d.MaDT == maDT && d.MaGV == maGV)
+                .Select(d => new
+                {
+                    d.MaDT,
+                    TenMon = d.MonHoc.TenMon,
+                    d.NamHoc,
+                    d.HocKy
+                })
+                .FirstOrDefault();
+
             if (deThi == null) return HttpNotFound();
 
-            var lopHocs = db.LopHocs.Where(l => l.NamHoc == deThi.NamHoc && l.MaGV == maGV).ToList();
+            var lopHocs = db.LopHocs
+                .Where(l => l.NamHoc == deThi.NamHoc && l.MaGV == maGV)
+                .ToList();
 
-            // Lấy danh sách sinh viên
-            var sinhVienQuery = db.SinhViens.Include("LopHoc")
+            var sinhVienQuery = db.SinhViens
                 .Where(s => s.LopHoc.NamHoc == deThi.NamHoc && s.LopHoc.MaGV == maGV);
+
             if (maLop.HasValue)
                 sinhVienQuery = sinhVienQuery.Where(s => s.MaLop == maLop.Value);
 
             var sinhViens = sinhVienQuery.ToList();
 
-            // Lấy kết quả đã chấm
             var ketQuas = db.KetQuas.Where(k => k.MaDT == maDT).ToList();
 
-            var danhSachDiem = sinhViens.Select(sv => {
+            var danhSachDiem = sinhViens.Select(sv =>
+            {
                 var kq = ketQuas.FirstOrDefault(k => k.MaSV == sv.MaSV);
+
                 return new DanhSachDiemItem
                 {
-                    MaSV      = sv.MaSV,
-                    HoTen     = sv.HoTen,
-                    TenLop    = sv.LopHoc.TenLop,
-                    DiemSo    = kq?.DiemSo,
-                    DiemChu   = kq?.DiemChu,
-                    NgayCham  = kq?.NgayCham,
-                    DaCham    = kq != null
+                    MaSV = sv.MaSV,
+                    HoTen = sv.HoTen,
+                    TenLop = sv.LopHoc.TenLop,
+                    DiemSo = kq?.DiemSo,
+                    DiemChu = kq?.DiemChu,
+                    NgayCham = kq?.NgayCham,
+                    DaCham = kq != null
                 };
-            }).OrderBy(x => x.TenLop).ThenBy(x => x.HoTen).ToList();
+            }).ToList();
 
             var vm = new NhapDiemViewModel
             {
-                MaDT          = maDT,
-                TenMon        = deThi.MonHoc.TenMon,
-                NamHoc        = deThi.NamHoc,
-                HocKy         = deThi.HocKy,
-                DanhSachDiem  = danhSachDiem,
-                DanhSachLop   = lopHocs,
-                MaLopFilter   = maLop
+                MaDT = maDT,
+                TenMon = deThi.TenMon,
+                HocKy = deThi.HocKy,
+                NamHoc = deThi.NamHoc,
+                DanhSachDiem = danhSachDiem,
+                DanhSachLop = lopHocs,
+                MaLopFilter = maLop
             };
 
             return View(vm);
         }
 
-        // POST: KetQua/LuuDiem - Lưu điểm hàng loạt
+        // POST: Lưu điểm
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LuuDiem(int maDT, List<int> maSVList, List<decimal?> diemSoList)
+        public ActionResult LuuDiem(int maDT, int[] maSVList, decimal?[] diemSoList)
         {
-            var check = CheckLogin(); if (check != null) return check;
-            int maGV = GetMaGV();
+            var check = CheckLogin();
+            if (check != null) return check;
 
             if (maSVList == null || diemSoList == null)
             {
-                TempData["Error"] = "Dữ liệu không hợp lệ.";
-                return RedirectToAction("NhapDiem", new { maDT = maDT });
+                TempData["Error"] = "Dữ liệu không hợp lệ";
+                return RedirectToAction("NhapDiem", new { maDT });
             }
 
-            for (int i = 0; i < maSVList.Count; i++)
+            for (int i = 0; i < maSVList.Length; i++)
             {
-                if (i >= diemSoList.Count || !diemSoList[i].HasValue) continue;
+                if (i >= diemSoList.Length || !diemSoList[i].HasValue) continue;
 
                 decimal diem = diemSoList[i].Value;
                 if (diem < 0 || diem > 10) continue;
 
-                int maSV = maSVList[i];
-                string diemChu = GetDiemChu(diem);
+                var maSV = maSVList[i];
 
-                var kq = db.KetQuas.FirstOrDefault(k => k.MaSV == maSV && k.MaDT == maDT);
+                var kq = db.KetQuas.FirstOrDefault(x => x.MaSV == maSV && x.MaDT == maDT);
+
                 if (kq == null)
                 {
                     db.KetQuas.Add(new KetQuaModel
                     {
-                        MaSV     = maSV,
-                        MaDT     = maDT,
-                        DiemSo   = diem,
-                        DiemChu  = diemChu,
-                        NgayCham = DateTime.Today
+                        MaSV = maSV,
+                        MaDT = maDT,
+                        DiemSo = diem,
+                        DiemChu = GetDiemChu(diem),
+                        NgayCham = DateTime.Now
                     });
                 }
                 else
                 {
-                    kq.DiemSo   = diem;
-                    kq.DiemChu  = diemChu;
-                    kq.NgayCham = DateTime.Today;
-                    db.Entry(kq).State = System.Data.Entity.EntityState.Modified;
+                    kq.DiemSo = diem;
+                    kq.DiemChu = GetDiemChu(diem);
+                    kq.NgayCham = DateTime.Now;
                 }
             }
 
             db.SaveChanges();
-            TempData["Success"] = "Điểm đã được lưu thành công!";
-            return RedirectToAction("NhapDiem", new { maDT = maDT });
+
+            TempData["Success"] = "Lưu điểm thành công!";
+            return RedirectToAction("NhapDiem", new { maDT });
         }
 
-        // Tự động tính điểm chữ từ điểm số
-        private string GetDiemChu(decimal diemSo)
+        private string GetDiemChu(decimal diem)
         {
-            var bdc = db.BangDiemChus
-                .Where(b => diemSo >= b.DiemSoTu && diemSo <= b.DiemSoDen)
-                .FirstOrDefault();
-            return bdc?.DiemChu ?? "F";
+            if (diem >= 8.5m) return "A";
+            if (diem >= 7) return "B";
+            if (diem >= 5.5m) return "C";
+            if (diem >= 4) return "D";
+            return "F";
         }
 
         protected override void Dispose(bool disposing)
@@ -149,5 +172,15 @@ namespace QuanLyRaDeChamThi.Controllers
             if (disposing) db.Dispose();
             base.Dispose(disposing);
         }
+    }
+
+    // DTO tránh proxy
+    public class DeThiNhapDiemItem
+    {
+        public int MaDT { get; set; }
+        public byte HocKy { get; set; }
+        public string NamHoc { get; set; }
+        public DateTime? NgayThi { get; set; }
+        public string TenMon { get; set; }
     }
 }

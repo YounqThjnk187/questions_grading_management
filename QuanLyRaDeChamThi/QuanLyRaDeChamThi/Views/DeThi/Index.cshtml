@@ -29,37 +29,69 @@
             <th>Thao tác</th>
         </tr>
     </thead>
+
     <tbody>
-        @if (!Model.Any())
-        {
-            <tr><td colspan="7" class="text-center text-muted"><i>Chưa có đề thi nào.</i></td></tr>
-        }
-        @foreach (var item in Model)
+        @if (Model == null || !Model.Any())
         {
             <tr>
-                <td>DT-@item.MaDT.ToString("D3")</td>
-                <td>@item.MonHoc?.TenMon</td>
-                <td><span class="badge">HK @item.HocKy</span></td>
-                <td>@item.NamHoc</td>
-                <td>@item.ThoiLuong phút</td>
-                <td>@(item.NgayThi.HasValue ? item.NgayThi.Value.ToString("dd/MM/yyyy") : "Chưa xác định")</td>
-                <td>
-                    <a href="@Url.Action("Details", new { id = item.MaDT })" class="btn btn-xs btn-info">
-                        <i class="glyphicon glyphicon-eye-open"></i> Xem
-                    </a>
-                    <a href="@Url.Action("NhapDiem", "KetQua", new { maDT = item.MaDT })" class="btn btn-xs btn-warning">
-                        <i class="glyphicon glyphicon-pencil"></i> Nhập điểm
-                    </a>
-                    @using (Html.BeginForm("Delete", "DeThi", new { id = item.MaDT }, FormMethod.Post, new { style = "display:inline;" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-xs btn-danger"
-                                onclick="return confirm('Xóa đề thi này? Tất cả kết quả thi liên quan sẽ bị xóa!')">
-                            <i class="glyphicon glyphicon-trash"></i> Xóa
-                        </button>
-                    }
+                <td colspan="7" class="text-center text-muted">
+                    <i>Chưa có đề thi nào.</i>
                 </td>
             </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>DT-@item.MaDT.ToString("D3")</td>
+
+                    <!-- ✅ FIX NULL SAFE -->
+                    <td>
+                        @(item.MonHoc != null ? item.MonHoc.TenMon : "Không xác định")
+                    </td>
+
+                    <td>
+                        <span class="badge">HK @item.HocKy</span>
+                    </td>
+
+                    <td>@item.NamHoc</td>
+
+                    <td>@item.ThoiLuong phút</td>
+
+                    <td>
+                        @(item.NgayThi.HasValue
+                            ? item.NgayThi.Value.ToString("dd/MM/yyyy")
+                            : "Chưa xác định")
+                    </td>
+
+                    <td>
+                        <a href="@Url.Action("Details", new { id = item.MaDT })"
+                           class="btn btn-xs btn-info">
+                            <i class="glyphicon glyphicon-eye-open"></i> Xem
+                        </a>
+
+                        <a href="@Url.Action("NhapDiem", "KetQua", new { maDT = item.MaDT })"
+                           class="btn btn-xs btn-warning">
+                            <i class="glyphicon glyphicon-pencil"></i> Nhập điểm
+                        </a>
+
+                        @using (Html.BeginForm("Delete", "DeThi",
+                            new { id = item.MaDT },
+                            FormMethod.Post,
+                            new { style = "display:inline;" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="btn btn-xs btn-danger"
+                                    onclick="return confirm('Xóa đề thi này?')">
+                                <i class="glyphicon glyphicon-trash"></i> Xóa
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>

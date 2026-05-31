@@ -1,5 +1,6 @@
 using System.Web.Mvc;
 using QuanLyRaDeChamThi.Models;
+using System.Linq;
 
 namespace QuanLyRaDeChamThi.Controllers
 {

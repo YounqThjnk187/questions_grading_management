@@ -18,7 +18,7 @@ namespace QuanLyRaDeChamThi.Models
         [Required(ErrorMessage = "Vui lòng chọn học kỳ")]
         [Display(Name = "Học kỳ")]
         [Range(1, 2, ErrorMessage = "Học kỳ chỉ có thể là 1 hoặc 2")]
-        public int HocKy { get; set; }
+        public byte HocKy { get; set; }
 
         [Required(ErrorMessage = "Vui lòng nhập năm học")]
         [Display(Name = "Năm học")]
