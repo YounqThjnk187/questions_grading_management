@@ -97,34 +97,34 @@ Hệ thống gồm 11 bảng chính:
 - THAM_SO
 
 ## Điểm nổi bật
-✔ CRUD đầy đủ (câu hỏi, đề thi, điểm)
-✔ Tra cứu linh hoạt
-✔ Tự động tính điểm chữ
-✔ Giao diện Bootstrap responsive
-✔ Có bản demo Python chạy ngay
-✔ Tách module rõ ràng theo MVC
+- CRUD đầy đủ (câu hỏi, đề thi, điểm)
+- Tra cứu linh hoạt
+- Tự động tính điểm chữ
+- Giao diện Bootstrap responsive
+- Có bản demo Python chạy ngay
+- Tách module rõ ràng theo MVC
 
 ## Tài khoản mẫu
 
 ```powershell
 Username	Password
-gv01	123456
-gv02	123456
-gv03	123456
+gv01	    123456
+gv02	    123456
+gv03	    123456
 ```
 
 ## Bảng điểm chữ
 
 ```powershell
-Điểm	Chữ
-8.5–10	A
-8.0–8.4	B+
-7.0–7.9	B
-6.5–6.9	C+
-5.5–6.4	C
-5.0–5.4	D+
-4.0–4.9	D
-<4.0	F
+Điểm	   Chữ
+8.5–10	   A
+8.0–8.4	   B+
+7.0–7.9	   B
+6.5–6.9	   C+
+5.5–6.4	   C
+5.0–5.4    D+
+4.0–4.9	   D
+<4.0	   F
 ```
 
 ## Kết luận
