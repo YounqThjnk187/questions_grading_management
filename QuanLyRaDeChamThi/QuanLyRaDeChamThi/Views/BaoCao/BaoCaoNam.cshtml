@@ -1,0 +1,127 @@
+@model QuanLyRaDeChamThi.Models.ViewModels.BaoCaoNamViewModel
+
+@{
+    ViewBag.Title = "Báo cáo năm";
+}
+
+<div class="page-header">
+    <h2><i class="glyphicon glyphicon-stats"></i> Báo cáo tổng kết năm học</h2>
+</div>
+
+<!-- Chọn năm học -->
+@using (Html.BeginForm("BaoCaoNam", "BaoCao", FormMethod.Get, new { @class = "form-inline" }))
+{
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <label>Năm học: </label>
+            <select name="namHoc" class="form-control" style="margin:0 10px; width:150px;">
+                @foreach (var nam in Model.DanhSachNamHoc)
+                {
+                    <option value="@nam" @(Model.NamHoc == nam ? "selected" : "")>@nam</option>
+                }
+            </select>
+            <button type="submit" class="btn btn-primary">
+                <i class="glyphicon glyphicon-search"></i> Xem báo cáo
+            </button>
+        </div>
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.NamHoc))
+{
+    <h3>Báo cáo năm học: <strong>@Model.NamHoc</strong></h3>
+
+    @if (!Model.DanhSachBaoCao.Any())
+    {
+        <div class="alert alert-warning">
+            <i class="glyphicon glyphicon-info-sign"></i> Chưa có dữ liệu kết quả thi cho năm học này.
+        </div>
+    }
+    else
+    {
+        <!-- Tổng quan -->
+        <div class="row" style="margin-bottom:20px;">
+            <div class="col-md-3">
+                <div class="panel panel-primary text-center">
+                    <div class="panel-body">
+                        <h2>@Model.DanhSachBaoCao.Sum(b => b.TongSinhVien)</h2>
+                        <p>Tổng sinh viên thi</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel panel-success text-center">
+                    <div class="panel-body">
+                        <h2>@Model.DanhSachBaoCao.Sum(b => b.SoA + b.SoBPlus + b.SoB)</h2>
+                        <p>Đạt loại Khá/Giỏi/XS</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel panel-danger text-center">
+                    <div class="panel-body">
+                        <h2>@Model.DanhSachBaoCao.Sum(b => b.SoF)</h2>
+                        <p>Không đạt (F)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel panel-info text-center">
+                    <div class="panel-body">
+                        @{
+                            int tongSV = Model.DanhSachBaoCao.Sum(b => b.TongSinhVien);
+                            int soF = Model.DanhSachBaoCao.Sum(b => b.SoF);
+                            decimal tiLeDao = tongSV > 0 ? (decimal)(tongSV - soF) / tongSV * 100 : 0;
+                        }
+                        <h2>@tiLeDao.ToString("F1")%</h2>
+                        <p>Tỉ lệ đỗ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bảng chi tiết -->
+        @foreach (var bao in Model.DanhSachBaoCao)
+        {
+            <div class="panel panel-default" style="margin-bottom:20px;">
+                <div class="panel-heading">
+                    <h4 style="margin:0;">
+                        <i class="glyphicon glyphicon-book"></i> @bao.TenMon
+                        <span class="badge">HK @bao.HocKy</span>
+                        <span class="text-info" style="font-size:14px; margin-left:15px;">
+                            Tổng: @bao.TongSinhVien SV | ĐTB: @bao.DiemTrungBinh.ToString("F2") | Tỉ lệ đỗ: @bao.TiLeDao.ToString("F1")%
+                        </span>
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="background:#27ae60;color:#fff;">A<br/><small>≥ 8.5</small></th>
+                                <th class="text-center" style="background:#2980b9;color:#fff;">B+<br/><small>8.0-8.4</small></th>
+                                <th class="text-center" style="background:#3498db;color:#fff;">B<br/><small>7.0-7.9</small></th>
+                                <th class="text-center" style="background:#f39c12;color:#fff;">C+<br/><small>6.5-6.9</small></th>
+                                <th class="text-center" style="background:#e67e22;color:#fff;">C<br/><small>5.5-6.4</small></th>
+                                <th class="text-center" style="background:#95a5a6;color:#fff;">D+<br/><small>5.0-5.4</small></th>
+                                <th class="text-center" style="background:#7f8c8d;color:#fff;">D<br/><small>4.0-4.9</small></th>
+                                <th class="text-center" style="background:#e74c3c;color:#fff;">F<br/><small>&lt; 4.0</small></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>@bao.SoA</strong><br/><small class="text-muted">@(bao.TongSinhVien>0 ? ((decimal)bao.SoA/bao.TongSinhVien*100).ToString("F0") : "0")%</small></td>
+                                <td><strong>@bao.SoBPlus</strong><br/><small class="text-muted">@(bao.TongSinhVien>0 ? ((decimal)bao.SoBPlus/bao.TongSinhVien*100).ToString("F0") : "0")%</small></td>
+                                <td><strong>@bao.SoB</strong><br/><small class="text-muted">@(bao.TongSinhVien>0 ? ((decimal)bao.SoB/bao.TongSinhVien*100).ToString("F0") : "0")%</small></td>
+                                <td><strong>@bao.SoCPlus</strong><br/><small class="text-muted">@(bao.TongSinhVien>0 ? ((decimal)bao.SoCPlus/bao.TongSinhVien*100).ToString("F0") : "0")%</small></td>
+                                <td><strong>@bao.SoC</strong><br/><small class="text-muted">@(bao.TongSinhVien>0 ? ((decimal)bao.SoC/bao.TongSinhVien*100).ToString("F0") : "0")%</small></td>
+                                <td><strong>@bao.SoDPlus</strong><br/><small class="text-muted">@(bao.TongSinhVien>0 ? ((decimal)bao.SoDPlus/bao.TongSinhVien*100).ToString("F0") : "0")%</small></td>
+                                <td><strong>@bao.SoD</strong><br/><small class="text-muted">@(bao.TongSinhVien>0 ? ((decimal)bao.SoD/bao.TongSinhVien*100).ToString("F0") : "0")%</small></td>
+                                <td><strong style="color:#e74c3c;">@bao.SoF</strong><br/><small class="text-muted">@(bao.TongSinhVien>0 ? ((decimal)bao.SoF/bao.TongSinhVien*100).ToString("F0") : "0")%</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    }
+}

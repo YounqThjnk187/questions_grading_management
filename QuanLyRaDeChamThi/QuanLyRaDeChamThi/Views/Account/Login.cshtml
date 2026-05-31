@@ -1,0 +1,77 @@
+@model QuanLyRaDeChamThi.Models.ViewModels.LoginViewModel
+
+@{
+    Layout = null;
+    ViewBag.Title = "Đăng nhập";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập – Quản Lý Ra Đề & Chấm Thi</title>
+    @Styles.Render("~/Content/css")
+    <style>
+        body { background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .login-box { background: #fff; border-radius: 10px; padding: 40px; width: 400px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+        .login-box h2 { text-align: center; color: #2c3e50; margin-bottom: 5px; }
+        .login-box .subtitle { text-align: center; color: #7f8c8d; font-size: 13px; margin-bottom: 30px; }
+        .login-box .form-control { border-radius: 25px; padding: 10px 20px; }
+        .login-box .btn-login { border-radius: 25px; padding: 10px; font-size: 16px; font-weight: bold; background: linear-gradient(to right, #1a2a6c, #b21f1f); border: none; }
+        .login-box .btn-login:hover { opacity: 0.9; }
+        .logo-icon { text-align: center; font-size: 60px; color: #3498db; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <div class="logo-icon"><i class="glyphicon glyphicon-education"></i></div>
+        <h2>Quản Lý Ra Đề</h2>
+        <p class="subtitle">& Chấm Thi – Nhóm 15 SE104.Q23</p>
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+        }
+
+        @using (Html.BeginForm("Login", "Account", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.TenDangNhap)
+                <div class="input-group">
+                    <span class="input-group-addon" style="border-radius:25px 0 0 25px;"><i class="glyphicon glyphicon-user"></i></span>
+                    @Html.TextBoxFor(m => m.TenDangNhap, new { @class = "form-control", placeholder = "Tên đăng nhập", style="border-radius:0 25px 25px 0;" })
+                </div>
+                @Html.ValidationMessageFor(m => m.TenDangNhap, "", new { @class = "text-danger small" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.MatKhau)
+                <div class="input-group">
+                    <span class="input-group-addon" style="border-radius:25px 0 0 25px;"><i class="glyphicon glyphicon-lock"></i></span>
+                    @Html.PasswordFor(m => m.MatKhau, new { @class = "form-control", placeholder = "Mật khẩu", style="border-radius:0 25px 25px 0;" })
+                </div>
+                @Html.ValidationMessageFor(m => m.MatKhau, "", new { @class = "text-danger small" })
+            </div>
+
+            <div class="form-group" style="margin-top:25px;">
+                <button type="submit" class="btn btn-primary btn-block btn-login">
+                    <i class="glyphicon glyphicon-log-in"></i> ĐĂNG NHẬP
+                </button>
+            </div>
+        }
+
+        <p class="text-center text-muted small" style="margin-top:15px;">
+            Tài khoản mặc định: <strong>gv01</strong> / <strong>123456</strong>
+        </p>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+</body>
+</html>
