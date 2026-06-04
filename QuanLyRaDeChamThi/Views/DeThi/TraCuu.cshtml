@@ -1,0 +1,85 @@
+@model IEnumerable<QuanLyRaDeChamThi.Models.DeThiModel>
+
+@{
+    ViewBag.Title = "Tra cứu đề thi";
+}
+
+<div class="page-header">
+    <h2>
+        <i class="glyphicon glyphicon-search"></i>
+        Tra cứu đề thi
+    </h2>
+</div>
+
+@using (Html.BeginForm("TraCuu", "DeThi", FormMethod.Get, new { @class = "form-inline", style = "margin-bottom:15px;" }))
+{
+    <div class="form-group">
+        <label>Môn học:</label>
+        <input type="text" name="tenMon" value="@ViewBag.TenMon" class="form-control" style="margin:0 10px;" />
+    </div>
+
+    <div class="form-group">
+        <label>Học kỳ:</label>
+        <select name="hocKy" class="form-control" style="margin:0 10px;">
+            <option value="">-- Tất cả --</option>
+            <option value="1" @(ViewBag.HocKy != null && (int)ViewBag.HocKy == 1 ? "selected" : "")>HK 1</option>
+            <option value="2" @(ViewBag.HocKy != null && (int)ViewBag.HocKy == 2 ? "selected" : "")>HK 2</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Năm học:</label>
+        <input type="text" name="namHoc" value="@ViewBag.NamHoc" class="form-control" style="margin:0 10px;" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        <i class="glyphicon glyphicon-search"></i> Tìm kiếm
+    </button>
+
+    <a href="@Url.Action("TraCuu")" class="btn btn-default">Xóa lọc</a>
+}
+
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Mã ĐT</th>
+            <th>Môn học</th>
+            <th>Học kỳ</th>
+            <th>Năm học</th>
+            <th>Thời lượng</th>
+            <th>Ngày thi</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model == null || !Model.Any())
+        {
+            <tr>
+                <td colspan="6" class="text-center text-muted">
+                    Không tìm thấy đề thi nào
+                </td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>DT-@item.MaDT.ToString("D3")</td>
+
+                    <!-- FIX QUAN TRỌNG: tránh EF proxy leak -->
+                    <td>
+                        @(item.MonHoc != null ? item.MonHoc.TenMon : "")
+                    </td>
+
+                    <td>HK @item.HocKy</td>
+                    <td>@item.NamHoc</td>
+                    <td>@item.ThoiLuong phút</td>
+                    <td>
+                        @(item.NgayThi.HasValue ? item.NgayThi.Value.ToString("dd/MM/yyyy") : "--")
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -1,0 +1,171 @@
+@model QuanLyRaDeChamThi.Models.ViewModels.BaoCaoNamViewModel
+
+@{
+    ViewBag.Title = "Báo cáo tổng kết năm học";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int tongSV = Model.DanhSachBaoCao.Sum(x => x.TongSinhVien);
+    int tongF = Model.DanhSachBaoCao.Sum(x => x.SoF);
+    int tongKha = Model.DanhSachBaoCao.Sum(x => x.SoA + x.SoBPlus + x.SoB);
+
+    decimal tiLeDo = tongSV > 0 ? (decimal)(tongSV - tongF) / tongSV * 100 : 0;
+
+    // Tổng hợp điểm chữ cho biểu đồ
+    var gradeTotals = new Dictionary<string, int>
+    {
+        {"A", Model.DanhSachBaoCao.Sum(x => x.SoA)},
+        {"B+", Model.DanhSachBaoCao.Sum(x => x.SoBPlus)},
+        {"B", Model.DanhSachBaoCao.Sum(x => x.SoB)},
+        {"C+", Model.DanhSachBaoCao.Sum(x => x.SoCPlus)},
+        {"C", Model.DanhSachBaoCao.Sum(x => x.SoC)},
+        {"D+", Model.DanhSachBaoCao.Sum(x => x.SoDPlus)},
+        {"D", Model.DanhSachBaoCao.Sum(x => x.SoD)},
+        {"F", Model.DanhSachBaoCao.Sum(x => x.SoF)}
+    };
+    int maxCount = gradeTotals.Values.Any() ? gradeTotals.Values.Max() : 1;
+
+    var gradeColors = new Dictionary<string, string>
+    {
+        {"A", "#27ae60"}, {"B+", "#2980b9"}, {"B", "#3498db"}, {"C+", "#f39c12"},
+        {"C", "#e67e22"}, {"D+", "#95a5a6"}, {"D", "#7f8c8d"}, {"F", "#e74c3c"}
+    };
+}
+
+<div class="page-header">
+    <h2>📊 Báo cáo tổng kết năm học</h2>
+</div>
+
+@* Filter năm học *@
+<form method="get" class="form-inline" style="margin-bottom:20px;">
+    <label>Năm học: </label>
+    <select name="namHoc" class="form-control" style="margin:0 10px;width:150px;" onchange="this.form.submit()">
+        <option value="">-- Tất cả --</option>
+        @foreach (var nh in ViewBag.NamHocs as List<string>)
+        {
+            <option value="@nh" @(nh == Model.NamHoc ? "selected" : "")>@nh</option>
+        }
+    </select>
+    <button type="submit" class="btn btn-primary">📊 Xem báo cáo</button>
+    @if (!string.IsNullOrEmpty(Request.QueryString["namHoc"]) && Model.DanhSachBaoCao.Any())
+    {
+        <a href="@Url.Action("ExportExcel", new { namHoc = Request.QueryString["namHoc"] })" class="btn btn-success" style="margin-left:10px;">
+            📊 Xuất báo cáo Excel
+        </a>
+    }
+</form>
+
+@if (Model.DanhSachBaoCao.Any())
+{
+    <h3>Năm học: <strong>@Model.NamHoc</strong></h3>
+
+    @* Stat Cards (giống Python demo) *@
+    <div class="row" style="margin-bottom:20px;">
+        <div class="col-md-3">
+            <div class="card-stat" style="background:linear-gradient(135deg,#00c6ff,#0072ff);text-align:center;padding:28px;border-radius:16px;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.15);transition:all 0.3s;">
+                <h2 style="font-size:42px;font-weight:700;margin-bottom:8px;color:#fff;">@tongSV</h2>
+                <p style="font-size:14px;font-weight:500;opacity:.9;margin:0;">Tổng sinh viên</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card-stat" style="background:linear-gradient(135deg,#56ab2f,#a8e063);text-align:center;padding:28px;border-radius:16px;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.15);transition:all 0.3s;">
+                <h2 style="font-size:42px;font-weight:700;margin-bottom:8px;color:#fff;">@tongKha</h2>
+                <p style="font-size:14px;font-weight:500;opacity:.9;margin:0;">Khá/Giỏi/Xuất sắc</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card-stat" style="background:linear-gradient(135deg,#eb3349,#f45c43);text-align:center;padding:28px;border-radius:16px;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.15);transition:all 0.3s;">
+                <h2 style="font-size:42px;font-weight:700;margin-bottom:8px;color:#fff;">@tongF</h2>
+                <p style="font-size:14px;font-weight:500;opacity:.9;margin:0;">Không đạt (F)</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card-stat" style="background:linear-gradient(135deg,#f093fb,#f5576c);text-align:center;padding:28px;border-radius:16px;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.15);transition:all 0.3s;">
+                <h2 style="font-size:42px;font-weight:700;margin-bottom:8px;color:#fff;">@tiLeDo.ToString("0.0")%</h2>
+                <p style="font-size:14px;font-weight:500;opacity:.9;margin:0;">Tỉ lệ đỗ</p>
+            </div>
+        </div>
+    </div>
+
+    @* Biểu đồ phân bố điểm tổng hợp *@
+    <div class="panel panel-info" style="margin-top:20px;">
+        <div class="panel-heading">
+            <h4 style="margin:0;">📊 Biểu đồ phân bố điểm tổng hợp năm học</h4>
+        </div>
+        <div class="panel-body" style="padding:20px;">
+            @foreach (var grade in new[] { "A", "B+", "B", "C+", "C", "D+", "D", "F" })
+            {
+                int count = gradeTotals[grade];
+                decimal pctVal = tongSV > 0 ? (decimal)count / tongSV * 100 : 0;
+                decimal width = maxCount > 0 ? (decimal)count / maxCount * 100 : 0;
+                string color = gradeColors[grade];
+
+                <div style="margin-bottom:8px;">
+                    <div style="display:flex;align-items:center;">
+                        <div style="width:40px;font-weight:bold;text-align:right;margin-right:10px;">@grade</div>
+                        <div style="flex:1;background:#ecf0f1;border-radius:4px;height:28px;position:relative;">
+                            <div style="background:@color;width:@width.ToString("0.0")%;height:100%;border-radius:4px;transition:width 0.3s;"></div>
+                            <div style="position:absolute;top:50%;right:10px;transform:translateY(-50%);font-weight:bold;color:#2c3e50;">
+                                @count (@pctVal.ToString("0.0")%)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <p class="text-muted text-center" style="margin-top:15px;">
+                <small>Biểu đồ thể hiện tổng số sinh viên đạt từng loại điểm chữ trong toàn bộ các môn thi</small>
+            </p>
+        </div>
+    </div>
+
+    @* Chi tiết từng môn học (giống Python demo) *@
+    @foreach (var item in Model.DanhSachBaoCao)
+    {
+        decimal tiLeDao = item.TongSinhVien > 0 ? (decimal)(item.TongSinhVien - item.SoF) / item.TongSinhVien * 100 : 0;
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 style="margin:0;">
+                    📘 @item.TenMon
+                    <span class="badge">HK @item.HocKy</span>
+                    <span class="text-info" style="font-size:13px;margin-left:15px;">
+                        Tổng: @item.TongSinhVien SV | ĐTB: @item.DiemTrungBinh.ToString("0.00") | Tỉ lệ đỗ: @tiLeDao.ToString("0.0")%
+                    </span>
+                </h4>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th style="background:#27ae60;color:#fff;">A<br /><small>≥8.5</small></th>
+                            <th style="background:#2980b9;color:#fff;">B+<br /><small>8.0-8.4</small></th>
+                            <th style="background:#3498db;color:#fff;">B<br /><small>7.0-7.9</small></th>
+                            <th style="background:#f39c12;color:#fff;">C+<br /><small>6.5-6.9</small></th>
+                            <th style="background:#e67e22;color:#fff;">C<br /><small>5.5-6.4</small></th>
+                            <th style="background:#95a5a6;color:#fff;">D+<br /><small>5.0-5.4</small></th>
+                            <th style="background:#7f8c8d;color:#fff;">D<br /><small>4.0-4.9</small></th>
+                            <th style="background:#e74c3c;color:#fff;">F<br /><small>&lt;4.0</small></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>@item.SoA</strong><br /><small>@((item.TongSinhVien > 0 ? (decimal)item.SoA / item.TongSinhVien * 100 : 0).ToString("0")%)</small></td>
+                            <td><strong>@item.SoBPlus</strong><br /><small>@((item.TongSinhVien > 0 ? (decimal)item.SoBPlus / item.TongSinhVien * 100 : 0).ToString("0")%)</small></td>
+                            <td><strong>@item.SoB</strong><br /><small>@((item.TongSinhVien > 0 ? (decimal)item.SoB / item.TongSinhVien * 100 : 0).ToString("0")%)</small></td>
+                            <td><strong>@item.SoCPlus</strong><br /><small>@((item.TongSinhVien > 0 ? (decimal)item.SoCPlus / item.TongSinhVien * 100 : 0).ToString("0")%)</small></td>
+                            <td><strong>@item.SoC</strong><br /><small>@((item.TongSinhVien > 0 ? (decimal)item.SoC / item.TongSinhVien * 100 : 0).ToString("0")%)</small></td>
+                            <td><strong>@item.SoDPlus</strong><br /><small>@((item.TongSinhVien > 0 ? (decimal)item.SoDPlus / item.TongSinhVien * 100 : 0).ToString("0")%)</small></td>
+                            <td><strong>@item.SoD</strong><br /><small>@((item.TongSinhVien > 0 ? (decimal)item.SoD / item.TongSinhVien * 100 : 0).ToString("0")%)</small></td>
+                            <td><strong style="color:#e74c3c;">@item.SoF</strong><br /><small>@((item.TongSinhVien > 0 ? (decimal)item.SoF / item.TongSinhVien * 100 : 0).ToString("0")%)</small></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-warning">
+        <strong>⚠️ Chưa có dữ liệu điểm cho năm học này.</strong>
+    </div>
+}
