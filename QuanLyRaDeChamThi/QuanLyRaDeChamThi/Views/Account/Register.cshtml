@@ -1,0 +1,131 @@
+@model QuanLyRaDeChamThi.Models.ViewModels.RegisterViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - Quản Lý Ra Đề & Chấm Thi</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .register-box {
+            background: #fff;
+            border-radius: 20px;
+            padding: 48px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.3);
+            max-width: 480px;
+            width: 100%;
+        }
+        .register-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .register-icon {
+            font-size: 64px;
+            margin-bottom: 8px;
+        }
+        .register-title {
+            font-size: 26px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        .btn-register {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 24px;
+        }
+        .register-footer {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #f0f2f5;
+        }
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: 600; }
+        .text-danger { color: #dc3545; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="register-box">
+        <div class="register-header">
+            <div class="register-icon">👨‍🏫</div>
+            <h1 class="register-title">Đăng ký tài khoản Giảng viên</h1>
+            <p style="color: #65676b; font-size: 13px; margin: 0;">Tạo tài khoản để sử dụng hệ thống</p>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@Html.Raw(TempData["Success"])</div>
+        }
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.HoTen, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.HoTen, new { @class = "form-control", placeholder = "VD: Nguyễn Văn A", autofocus = "autofocus" })
+                @Html.ValidationMessageFor(m => m.HoTen, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.TenDangNhap, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.TenDangNhap, new { @class = "form-control", placeholder = "VD: nguyenvana", pattern = "[a-z0-9]+", title = "Chỉ chữ thường và số" })
+                @Html.ValidationMessageFor(m => m.TenDangNhap, "", new { @class = "text-danger" })
+                <small class="text-muted">Chỉ dùng chữ thường và số (a-z, 0-9)</small>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.MatKhau, new { @class = "control-label" })
+                @Html.PasswordFor(m => m.MatKhau, new { @class = "form-control", placeholder = "Tối thiểu 6 ký tự" })
+                @Html.ValidationMessageFor(m => m.MatKhau, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.XacNhanMatKhau, new { @class = "control-label" })
+                @Html.PasswordFor(m => m.XacNhanMatKhau, new { @class = "form-control", placeholder = "Nhập lại mật khẩu" })
+                @Html.ValidationMessageFor(m => m.XacNhanMatKhau, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Email, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "example@uit.edu.vn (tùy chọn)", type = "email" })
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+            </div>
+
+            <button type="submit" class="btn btn-success btn-register">✅ Đăng ký tài khoản</button>
+        }
+
+        <div class="register-footer">
+            <p style="color: #65676b; font-size: 13px; margin: 0;">
+                Đã có tài khoản? <a href="@Url.Action("Login", "Account")" style="color: #667eea; font-weight: 600; text-decoration: none;">Đăng nhập</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="~/Scripts/jquery-3.6.0.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

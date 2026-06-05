@@ -1,0 +1,53 @@
+@model QuanLyRaDeChamThi.Models.SinhVienModel
+@{
+    ViewBag.Title = "Thêm sinh viên";
+}
+
+<div class="page-header"><h2>➕ Thêm sinh viên mới</h2></div>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@Html.Raw(TempData["Error"])</div>
+}
+
+@using (Html.BeginForm("Create", "SinhVien", FormMethod.Post, new { @class = "form-horizontal", style = "max-width:600px;" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.HoTen, "Họ tên *", new { @class = "col-sm-3 control-label" })
+        <div class="col-sm-9">
+            @Html.TextBoxFor(m => m.HoTen, new { @class = "form-control", placeholder = "VD: Nguyễn Văn A", required = "required" })
+        </div>
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.NgaySinh, "Ngày sinh *", new { @class = "col-sm-3 control-label" })
+        <div class="col-sm-9">
+            @Html.TextBoxFor(m => m.NgaySinh, new { @class = "form-control", type = "date", required = "required" })
+        </div>
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.MaLop, "Lớp *", new { @class = "col-sm-3 control-label" })
+        <div class="col-sm-9">
+            <select name="MaLop" class="form-control" required>
+                <option value="">-- Chọn lớp --</option>
+                @if (ViewBag.LopHocs != null)
+                {
+                    foreach (var lop in ViewBag.LopHocs)
+                    {
+                        <option value="@lop.MaLop">@lop.TenLop</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" class="btn btn-success">💾 Lưu sinh viên</button>
+            <a href="@Url.Action("Index")" class="btn btn-default">❌ Hủy</a>
+        </div>
+    </div>
+}

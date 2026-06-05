@@ -1,0 +1,47 @@
+@model QuanLyRaDeChamThi.Models.MonHocModel
+@{
+    ViewBag.Title = "Thêm môn học";
+}
+
+<div class="page-header"><h2>➕ Thêm môn học mới</h2></div>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@Html.Raw(TempData["Error"])</div>
+}
+
+@using (Html.BeginForm("Create", "MonHoc", FormMethod.Post, new { @class = "form-horizontal", style = "max-width:600px;" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.TenMon, "Tên môn học", new { @class = "col-sm-3 control-label" })
+        <div class="col-sm-9">
+            @Html.TextBoxFor(m => m.TenMon, new { @class = "form-control", placeholder = "VD: Lập trình hướng đối tượng", required = "required" })
+        </div>
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.MaGV, "Giảng viên phụ trách", new { @class = "col-sm-3 control-label" })
+        <div class="col-sm-9">
+            <select name="MaGV" class="form-control">
+                <option value="">-- Chọn giảng viên --</option>
+                @if (ViewBag.GiangViens != null)
+                {
+                    foreach (var gv in ViewBag.GiangViens)
+                    {
+                        <option value="@gv.MaGV">@gv.HoTen</option>
+                    }
+                }
+            </select>
+            <small class="text-muted">Có thể để trống, phân công sau</small>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" class="btn btn-success">💾 Lưu môn học</button>
+            <a href="@Url.Action("Index")" class="btn btn-default">❌ Hủy</a>
+        </div>
+    </div>
+}

@@ -1,0 +1,106 @@
+@model IEnumerable<QuanLyRaDeChamThi.Models.SinhVienModel>
+
+@{
+    ViewBag.Title = "Quản lý Sinh viên";
+}
+
+<div class="page-header">
+    <h2>👨‍🎓 Quản lý Sinh viên</h2>
+
+    <a href="@Url.Action("Create")"
+       class="btn btn-success pull-right"
+       style="margin-top:-40px;">
+        ➕ Thêm sinh viên
+    </a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible">
+        <button class="close" data-dismiss="alert">&times;</button>
+        @Html.Raw(TempData["Success"])
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible">
+        <button class="close" data-dismiss="alert">&times;</button>
+        @Html.Raw(TempData["Error"])
+    </div>
+}
+
+<div class="alert alert-info">
+    📊 Tổng số:
+    <strong>@(ViewBag.TotalCount ?? 0) sinh viên</strong>
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th class="text-center" width="80">Mã SV</th>
+            <th>Họ tên</th>
+            <th class="text-center" width="120">Ngày sinh</th>
+            <th width="180">Lớp</th>
+            <th class="text-center" width="150">Thao tác</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-center">
+                        <strong>#@item.MaSV</strong>
+                    </td>
+
+                    <td>
+                        <span style="font-size:16px;">
+                            👤 @item.HoTen
+                        </span>
+                    </td>
+
+                    <td class="text-center">
+                        @(item.NgaySinh.HasValue
+                            ? item.NgaySinh.Value.ToString("dd/MM/yyyy")
+                            : "")
+                    </td>
+
+                    <td>
+                        @if (item.LopHoc != null)
+                        {
+                            @item.LopHoc.TenLop
+                        }
+                        else
+                        {
+                            <em class="text-muted">Chưa vào lớp</em>
+                        }
+                    </td>
+
+                    <td class="text-center">
+                        <a href="@Url.Action("Edit", new { id = item.MaSV })"
+                           class="btn btn-xs btn-warning">
+                            ✏️ Sửa
+                        </a>
+
+                        <a href="@Url.Action("Delete", new { id = item.MaSV })"
+                           class="btn btn-xs btn-danger"
+                           onclick="return confirm('Xóa sinh viên @item.HoTen?')">
+                            🗑️ Xóa
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center text-muted">
+                    <em>Chưa có sinh viên nào</em>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,94 @@
+@model IEnumerable<QuanLyRaDeChamThi.Models.MonHocModel>
+
+@{
+    ViewBag.Title = "Quản lý Môn học";
+}
+
+<div class="page-header">
+    <h2>📚 Quản lý Môn học</h2>
+
+    <a href="@Url.Action("Create")"
+       class="btn btn-success pull-right"
+       style="margin-top:-40px;">
+        ➕ Thêm môn mới
+    </a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible">
+        <button class="close" data-dismiss="alert">&times;</button>
+        @Html.Raw(TempData["Success"])
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible">
+        <button class="close" data-dismiss="alert">&times;</button>
+        @Html.Raw(TempData["Error"])
+    </div>
+}
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th class="text-center" width="80">Mã</th>
+            <th>Tên môn học</th>
+            <th width="250">Giảng viên phụ trách</th>
+            <th class="text-center" width="150">Thao tác</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-center">
+                        <strong>#@item.MaMon</strong>
+                    </td>
+
+                    <td>
+                        <span style="font-size:16px;">
+                            📖 @item.TenMon
+                        </span>
+                    </td>
+
+                    <td>
+                        @if (item.GiangVien != null)
+                        {
+                            @item.GiangVien.HoTen
+                        }
+                        else
+                        {
+                            <em class="text-muted">Chưa phân công</em>
+                        }
+                    </td>
+
+                    <td class="text-center">
+                        <a href="@Url.Action("Edit", new { id = item.MaMon })"
+                           class="btn btn-xs btn-warning">
+                            ✏️ Sửa
+                        </a>
+
+                        <a href="@Url.Action("Delete", new { id = item.MaMon })"
+                           class="btn btn-xs btn-danger"
+                           onclick="return confirm('Xóa môn @item.TenMon ?')">
+                            🗑️ Xóa
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center text-muted">
+                    <em>Chưa có môn học nào</em>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
