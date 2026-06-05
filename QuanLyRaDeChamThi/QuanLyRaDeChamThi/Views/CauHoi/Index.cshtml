@@ -5,24 +5,82 @@
 }
 
 <div class="page-header">
-    <h2><i class="glyphicon glyphicon-list-alt"></i> Ngân hàng câu hỏi</h2>
+    <h2>📋 Ngân hàng câu hỏi</h2>
 </div>
+
+@* Hiển thị thông báo thành công *@
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        ✅ @TempData["Success"]
+    </div>
+}
+
+@* Cảnh báo thiếu câu hỏi *@
+@{
+    var monCounts = ViewBag.MonCounts as System.Collections.Generic.Dictionary<int, int>;
+    var danhSachMon = ViewBag.DanhSachMon as List<QuanLyRaDeChamThi.Models.MonHocModel>;
+    var lowQuestions = danhSachMon.Where(m => !monCounts.ContainsKey(m.MaMon) || monCounts[m.MaMon] < 10).ToList();
+}
+@if (lowQuestions.Any())
+{
+    <div class="alert alert-warning">
+        <strong>⚠️ Cảnh báo:</strong> Một số môn học có ít câu hỏi (< 10 câu):
+        <ul style="margin:10px 0 0 20px;">
+            @foreach (var mon in lowQuestions)
+            {
+                int count = monCounts.ContainsKey(mon.MaMon) ? monCounts[mon.MaMon] : 0;
+                <li><strong>@mon.TenMon</strong>: chỉ có @count câu hỏi</li>
+            }
+        </ul>
+    </div>
+}
+
+<!-- SEARCH BOX -->
+@using (Html.BeginForm("Index", "CauHoi", FormMethod.Get, new { @class = "form-inline", style = "margin-bottom:10px;" }))
+{
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="form-group">
+                <input type="text" name="search" class="form-control" 
+                       placeholder="🔍 Tìm kiếm nội dung câu hỏi..." 
+                       value="@ViewBag.Search" 
+                       style="width:300px;margin-right:10px;">
+            </div>
+            <button type="submit" class="btn btn-primary">🔎 Tìm</button>
+            <a href="@Url.Action("Index")" class="btn btn-default">Xóa tìm kiếm</a>
+        </div>
+    </div>
+}
+
+@* Hiển thị kết quả tìm kiếm *@
+@if (!string.IsNullOrEmpty(ViewBag.Search))
+{
+    <div class="alert alert-info">
+        🔍 Tìm kiếm: "<strong>@ViewBag.Search</strong>" - 
+        Tìm thấy <strong>@Model.Count()</strong> kết quả
+    </div>
+}
 
 <!-- FILTER -->
 @using (Html.BeginForm("Index", "CauHoi", FormMethod.Get, new { @class = "form-inline", style = "margin-bottom:15px;" }))
 {
     <div class="panel panel-default">
         <div class="panel-body">
+            @* Giữ search value khi filter *@
+            <input type="hidden" name="search" value="@ViewBag.Search" />
 
             <div class="form-group">
                 <label>Môn học:</label>
                 <select name="maMonFilter" class="form-control" style="margin:0 10px;">
                     <option value="">-- Tất cả --</option>
-                    @foreach (var mon in (List<QuanLyRaDeChamThi.Models.MonHocModel>)ViewBag.DanhSachMon)
+                    @foreach (var mon in danhSachMon)
                     {
+                        int count = monCounts.ContainsKey(mon.MaMon) ? monCounts[mon.MaMon] : 0;
                         <option value="@mon.MaMon"
                                 @(ViewBag.MaMonFilter != null && (int)ViewBag.MaMonFilter == mon.MaMon ? "selected" : "")>
-                            @mon.TenMon
+                            @mon.TenMon (@count)
                         </option>
                     }
                 </select>
@@ -42,14 +100,12 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">
-                <i class="glyphicon glyphicon-filter"></i> Lọc
-            </button>
+            <button type="submit" class="btn btn-info">🔍 Lọc</button>
 
-            <a href="@Url.Action("Index")" class="btn btn-default">Xóa lọc</a>
+            <a href="@Url.Action("Index", new { search = ViewBag.Search })" class="btn btn-default">Xóa lọc</a>
 
             <a href="@Url.Action("Create")" class="btn btn-success pull-right">
-                <i class="glyphicon glyphicon-plus"></i> Thêm câu hỏi
+                ➕ Thêm câu hỏi
             </a>
 
         </div>

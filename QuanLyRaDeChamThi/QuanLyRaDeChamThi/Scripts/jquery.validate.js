@@ -1,4 +1,3 @@
-<<<<<<< HEAD:QuanLyRaDeChamThi/QuanLyRaDeChamThi/Scripts/jquery.validate.js
 /*!
  * jQuery Validation Plugin v1.19.3
  *
@@ -17,26 +16,6 @@
 	}
 }(function( $ ) {
 
-=======
-/*!
- * jQuery Validation Plugin v1.19.3
- *
- * https://jqueryvalidation.org/
- *
- * Copyright (c) 2021 Jörn Zaefferer
- * Released under the MIT license
- */
-(function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
-		define( ["jquery"], factory );
-	} else if (typeof module === "object" && module.exports) {
-		module.exports = factory( require( "jquery" ) );
-	} else {
-		factory( jQuery );
-	}
-}(function( $ ) {
-
->>>>>>> a546afd41e823ba8c7e40278b493716982ebbd39:QuanLyRaDeChamThi/Scripts/jquery.validate.js
 $.extend( $.fn, {
 
 	// https://jqueryvalidation.org/validate/
@@ -1638,11 +1617,7 @@ $.extend( $.validator, {
 	}
 
 } );
-<<<<<<< HEAD:QuanLyRaDeChamThi/QuanLyRaDeChamThi/Scripts/jquery.validate.js
 
-=======
-
->>>>>>> a546afd41e823ba8c7e40278b493716982ebbd39:QuanLyRaDeChamThi/Scripts/jquery.validate.js
 // Ajax mode: abort
 // usage: $.ajax({ mode: "abort"[, port: "uniqueport"]});
 // if mode:"abort" is used, the previous request on that port (port can be undefined) is aborted via XMLHttpRequest.abort()
@@ -1678,9 +1653,5 @@ if ( $.ajaxPrefilter ) {
 		return ajax.apply( this, arguments );
 	};
 }
-<<<<<<< HEAD:QuanLyRaDeChamThi/QuanLyRaDeChamThi/Scripts/jquery.validate.js
 return $;
-=======
-return $;
->>>>>>> a546afd41e823ba8c7e40278b493716982ebbd39:QuanLyRaDeChamThi/Scripts/jquery.validate.js
 }));

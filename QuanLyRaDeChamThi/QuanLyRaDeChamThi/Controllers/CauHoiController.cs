@@ -22,7 +22,7 @@ namespace QuanLyRaDeChamThi.Controllers
         }
 
         // GET: CauHoi
-        public ActionResult Index(int? maMonFilter, int? maDoKhoFilter)
+        public ActionResult Index(int? maMonFilter, int? maDoKhoFilter, string search)
         {
             var check = CheckLogin();
             if (check != null) return check;
@@ -35,22 +35,40 @@ namespace QuanLyRaDeChamThi.Controllers
                 .Include(c => c.DoKho)
                 .Where(c => c.MonHoc.MaGV == maGV);
 
-            // filter
+            // filter search
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(c => c.NoiDung.Contains(search));
+            }
+
+            // filter môn
             if (maMonFilter.HasValue)
                 query = query.Where(c => c.MaMon == maMonFilter.Value);
 
+            // filter độ khó
             if (maDoKhoFilter.HasValue)
                 query = query.Where(c => c.MaDoKho == maDoKhoFilter.Value);
 
             // dropdown data
-            ViewBag.DanhSachMon = db.MonHocs
+            var danhSachMon = db.MonHocs
                 .Where(m => m.MaGV == maGV)
                 .ToList();
-
+            
+            ViewBag.DanhSachMon = danhSachMon;
             ViewBag.DanhSachDoKho = db.DoKhos.ToList();
 
             ViewBag.MaMonFilter = maMonFilter;
             ViewBag.MaDoKhoFilter = maDoKhoFilter;
+            ViewBag.Search = search;
+
+            // Đếm số câu hỏi theo môn để cảnh báo
+            var monCounts = db.CauHois
+                .Where(c => c.MonHoc.MaGV == maGV)
+                .GroupBy(c => c.MaMon)
+                .Select(g => new { MaMon = g.Key, Count = g.Count() })
+                .ToDictionary(x => x.MaMon, x => x.Count);
+            
+            ViewBag.MonCounts = monCounts;
 
             // ⚠️ FIX QUAN TRỌNG: materialize sau include
             var result = query.ToList();

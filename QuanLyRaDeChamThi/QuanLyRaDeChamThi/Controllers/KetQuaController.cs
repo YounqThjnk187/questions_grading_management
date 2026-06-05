@@ -64,12 +64,10 @@ namespace QuanLyRaDeChamThi.Controllers
 
             if (deThi == null) return HttpNotFound();
 
-            var lopHocs = db.LopHocs
-                .Where(l => l.NamHoc == deThi.NamHoc && l.MaGV == maGV)
-                .ToList();
+            var lopHocs = db.LopHocs.ToList();
 
-            var sinhVienQuery = db.SinhViens
-                .Where(s => s.LopHoc.NamHoc == deThi.NamHoc && s.LopHoc.MaGV == maGV);
+            // Lấy TẤT CẢ sinh viên (không filter theo năm học)
+            var sinhVienQuery = db.SinhViens.AsQueryable();
 
             if (maLop.HasValue)
                 sinhVienQuery = sinhVienQuery.Where(s => s.MaLop == maLop.Value);
@@ -86,7 +84,7 @@ namespace QuanLyRaDeChamThi.Controllers
                 {
                     MaSV = sv.MaSV,
                     HoTen = sv.HoTen,
-                    TenLop = sv.LopHoc.TenLop,
+                    TenLop = sv.LopHoc?.TenLop ?? "Chưa có lớp",
                     DiemSo = kq?.DiemSo,
                     DiemChu = kq?.DiemChu,
                     NgayCham = kq?.NgayCham,
