@@ -1,5 +1,4 @@
 #  Hệ thống Quản lý Ra đề và Chấm thi
-## Nhóm 15 – SE104.Q23
 
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/YounqThjnk187/questions_grading_management)
 [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-4.6.1-512BD4)](https://dotnet.microsoft.com/)
